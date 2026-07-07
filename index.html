@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>&ρ Andrho </title>
+<meta name="description" content="AndRho conecta tu ERP, tus canales digitales y tu equipo en un solo centro de control. Vemos los patrones, tú tomas las decisiones." />
+
+<!--
+  NOTA PARA TU PROYECTO VITE + TAILWIND:
+  Este archivo usa Tailwind vía CDN + tailwind.config inline SOLO para que puedas
+  previsualizarlo de forma independiente. En tu proyecto real, donde Tailwind ya
+  se compila con PostCSS, ELIMINA el <script src="https://cdn.tailwindcss.com">
+  y el bloque tailwind.config de abajo — todas las clases usan valores arbitrarios
+  con variables CSS (ej. bg-[var(--c-void)]), así que funcionan igual sin tocar
+  tu tailwind.config.js.
+-->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {} } };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --c-void: #0B0A1A;
+    --c-nebula: #14112A;
+    --c-panel: #1D1938;
+    --c-panel-2: #241F45;
+    --c-solar: #FFC745;
+    --c-solar-dim: #D9A838;
+    --c-plasma: #FF2162;
+    --c-plasma-dim: #D91850;
+    --c-comet: #6EE7FF;
+    --c-stardust: #F5F2FF;
+    --c-mist: #9A93C2;
+    --c-line: rgba(245,242,255,0.10);
+  }
+
+  *{ scroll-behavior: smooth; }
+  body{
+    background: var(--c-void);
+    color: var(--c-stardust);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display{ font-family: 'Space Grotesk', sans-serif; }
+  .font-mono{ font-family: 'JetBrains Mono', monospace; }
+
+  .bg-starfield{
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(245,242,255,.55) 0, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(245,242,255,.4) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 70%, rgba(245,242,255,.5) 0, transparent 100%),
+      radial-gradient(1px 1px at 30% 85%, rgba(245,242,255,.35) 0, transparent 100%),
+      radial-gradient(1px 1px at 92% 55%, rgba(245,242,255,.4) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 45% 40%, rgba(245,242,255,.3) 0, transparent 100%);
+    background-repeat: repeat;
+    background-size: 600px 600px;
+  }
+
+  .grid-overlay{
+    background-image:
+      linear-gradient(to right, var(--c-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--c-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  @keyframes float-slow{
+    0%,100%{ transform: translate(0,0) rotate(0deg); }
+    50%{ transform: translate(0,-18px) rotate(8deg); }
+  }
+  @keyframes float-slower{
+    0%,100%{ transform: translate(0,0) rotate(0deg); }
+    50%{ transform: translate(14px,10px) rotate(-10deg); }
+  }
+  @keyframes orbit{
+    from{ transform: rotate(0deg) translateX(var(--r)) rotate(0deg); }
+    to{ transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
+  }
+  @keyframes blink{
+    0%,49%{ opacity: 1; }
+    50%,100%{ opacity: 0; }
+  }
+  @keyframes marquee{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  @keyframes pulse-glow{
+    0%,100%{ box-shadow: 0 0 0 0 rgba(255,199,69,.35); }
+    50%{ box-shadow: 0 0 0 12px rgba(255,199,69,0); }
+  }
+
+  .animate-float-slow{ animation: float-slow 7s ease-in-out infinite; }
+  .animate-float-slower{ animation: float-slower 9s ease-in-out infinite; }
+  .animate-marquee{ animation: marquee 28s linear infinite; }
+  .cursor-blink{ animation: blink 1s step-start infinite; }
+
+  .text-gradient{
+    background: linear-gradient(90deg, var(--c-solar), var(--c-plasma));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .card-hover{ transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, background .35s ease; }
+  .card-hover:hover{ transform: translateY(-6px); border-color: rgba(255,199,69,.45); }
+
+  .btn-solar{ background: var(--c-solar); color: var(--c-void); }
+  .btn-solar:hover{ background: var(--c-solar-dim); }
+
+  .shape{ filter: drop-shadow(0 8px 24px rgba(0,0,0,.35)); }
+
+  ::selection{ background: var(--c-plasma); color: var(--c-stardust); }
+
+  input:focus-visible, button:focus-visible, a:focus-visible{
+    outline: 2px solid var(--c-comet);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  #gameCanvas{ touch-action: none; background: radial-gradient(circle at 50% 20%, #1a1638 0%, #0B0A1A 70%); }
+</style>
+</head>
+
+<body class="antialiased overflow-x-hidden">
+
+<!-- ============ NAV ============ -->
+<header class="fixed top-0 inset-x-0 z-50 border-b border-[var(--c-line)] bg-[var(--c-void)]/80 backdrop-blur-md">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2 font-display font-bold text-lg tracking-tight">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--c-solar)]" style="animation: pulse-glow 2.4s ease-in-out infinite;"></span>
+      &ρ
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--c-mist)]">
+      <a href="#producto" class="hover:text-[var(--c-stardust)] transition-colors">Producto</a>
+      <a href="#como-funciona" class="hover:text-[var(--c-stardust)] transition-colors">Cómo funciona</a>
+      <a href="#creators" class="hover:text-[var(--c-stardust)] transition-colors">Creators</a>
+      <a href="#planes" class="hover:text-[var(--c-stardust)] transition-colors">Planes</a>
+      <a href="#minijuego" class="hover:text-[var(--c-stardust)] transition-colors">Modo desvío</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="#signin" class="hidden sm:inline-block text-sm font-medium text-[var(--c-stardust)] hover:text-[var(--c-comet)] transition-colors">Iniciar sesión</a>
+      <a href="#signin" class="btn-solar text-sm font-semibold px-4 py-2 rounded-full transition-colors">Sign in gratis</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="relative pt-32 pb-24 lg:pt-44 lg:pb-32 bg-starfield overflow-hidden">
+  <div class="absolute inset-0 grid-overlay [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)] opacity-40"></div>
+
+  <img src="/shapes/triangle.svg" alt="" aria-hidden="true" class="shape absolute top-24 left-[6%] w-10 h-10 opacity-70 animate-float-slow" />
+  <img src="/shapes/ring.svg" alt="" aria-hidden="true" class="shape absolute top-40 right-[10%] w-16 h-16 opacity-60 animate-float-slower" />
+  <img src="/shapes/star.svg" alt="" aria-hidden="true" class="shape absolute bottom-16 left-[14%] w-8 h-8 opacity-70 animate-float-slow" />
+  <img src="/shapes/hexagon.svg" alt="" aria-hidden="true" class="shape absolute bottom-24 right-[16%] w-12 h-12 opacity-60 animate-float-slower" />
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
+    <div>
+      <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-comet)] border border-[var(--c-comet)]/30 rounded-full px-3 py-1">
+        v1.0 · fuera de beta, dentro de la atmósfera
+      </span>
+      <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl leading-[1.05] mt-6">
+        Tu negocio ya tiene gravedad.
+        <span class="text-gradient">Nosotros le damos velocidad de escape.</span>
+      </h1>
+      <p class="text-[var(--c-mist)] text-lg mt-6 max-w-xl">
+        AndRho conecta tu ERP, tus canales digitales y a tu equipo en un solo centro de control.
+        Trackeamos todo, cruzamos los datos y te dejamos las decisiones difíciles a ti
+        (nosotros solo hacemos que parezcan fáciles).
+      </p>
+      <div class="flex flex-wrap items-center gap-4 mt-9">
+        <a href="#signin" class="btn-solar font-semibold px-6 py-3.5 rounded-full transition-colors">Empezar sign in</a>
+        <a href="#producto" class="font-medium px-6 py-3.5 rounded-full border border-[var(--c-line)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">
+          Ver cómo funciona ↓
+        </a>
+      </div>
+      <p class="font-mono text-xs text-[var(--c-mist)] mt-8">
+        Sin tarjeta. Sin PowerPoint de 40 slides. Sin excusas para no saber qué pasa en tu operación.
+      </p>
+    </div>
+
+    <div class="relative">
+      <div class="rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)]/90 shadow-2xl shadow-black/40 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-[var(--c-line)] bg-[var(--c-nebula)]">
+          <span class="w-2.5 h-2.5 rounded-full bg-[var(--c-plasma)]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[var(--c-solar)]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[var(--c-comet)]"></span>
+          <span class="font-mono text-xs text-[var(--c-mist)] ml-2">andrho // panel-de-control</span>
+        </div>
+        <div class="p-6 font-mono text-sm leading-relaxed h-72">
+          <p id="typing-line" class="text-[var(--c-stardust)]"></p>
+          <span class="text-[var(--c-comet)] cursor-blink">▍</span>
+        </div>
+      </div>
+      <div class="absolute -bottom-6 -right-6 hidden sm:block rounded-xl border border-[var(--c-line)] bg-[var(--c-panel-2)] px-5 py-4 shadow-xl">
+        <p class="font-mono text-xs text-[var(--c-mist)]">Eficiencia detectada</p>
+        <p class="font-display font-bold text-2xl text-[var(--c-solar)]">+23.4%</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUSTED BY ============ -->
+<section class="py-14 border-y border-[var(--c-line)] bg-[var(--c-nebula)]">
+  <p class="text-center font-mono text-xs uppercase tracking-widest text-[var(--c-mist)] mb-8">
+    Empresas que ya alcanzaron su órbita
+  </p>
+  <div class="relative overflow-hidden">
+    <div class="flex gap-16 animate-marquee w-max">
+      <div class="flex gap-16 items-center opacity-70">
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/circle.svg" class="w-5 h-5" alt=""/>Órbita Studio</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/square.svg" class="w-5 h-5" alt=""/>Nova Textiles</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/diamond.svg" class="w-5 h-5" alt=""/>Quark Logística</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/hexagon.svg" class="w-5 h-5" alt=""/>Vector & Co.</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/cross.svg" class="w-5 h-5" alt=""/>Helix Foods</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/ring.svg" class="w-5 h-5" alt=""/>Zenit Retail</span>
+      </div>
+      <div class="flex gap-16 items-center opacity-70" aria-hidden="true">
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/circle.svg" class="w-5 h-5" alt=""/>Órbita Studio</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/square.svg" class="w-5 h-5" alt=""/>Nova Textiles</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/diamond.svg" class="w-5 h-5" alt=""/>Quark Logística</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/hexagon.svg" class="w-5 h-5" alt=""/>Vector & Co.</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/cross.svg" class="w-5 h-5" alt=""/>Helix Foods</span>
+        <span class="font-display font-semibold text-xl flex items-center gap-2"><img src="/shapes/ring.svg" class="w-5 h-5" alt=""/>Zenit Retail</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTO ============ -->
+<section id="producto" class="py-24 lg:py-32 max-w-7xl mx-auto px-6 lg:px-10">
+  <div class="max-w-2xl mb-16">
+    <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-plasma)]">El panel de inicio</span>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mt-4">
+      Cuatro secciones. Cero reuniones para saber qué pasa.
+    </h2>
+    <p class="text-[var(--c-mist)] text-lg mt-5">
+      AndRho trackea tu ERP, tus canales digitales y el uso real que le da tu equipo a todo esto.
+      Con eso, hace lo que la estadística siempre prometió: sugerir, prevenir, predecir. Sin bola de cristal.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card-hover rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8">
+      <img src="/shapes/star.svg" alt="" class="w-9 h-9 mb-6" />
+      <h3 class="font-display font-semibold text-xl mb-2">Sugerencias</h3>
+      <p class="text-[var(--c-mist)]">
+        Cuando el sistema detecta una anomalía o una oportunidad, no te manda un correo a las 3am:
+        te deja la sugerencia lista para aceptar, rechazar o comentar.
+      </p>
+    </div>
+    <div class="card-hover rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8">
+      <img src="/shapes/hexagon.svg" alt="" class="w-9 h-9 mb-6" />
+      <h3 class="font-display font-semibold text-xl mb-2">Resúmenes</h3>
+      <p class="text-[var(--c-mist)]">
+        KPIs y gráficas que de verdad respondes en 10 segundos, no dashboards que solo entiende
+        quien los construyó.
+      </p>
+    </div>
+    <div class="card-hover rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8">
+      <img src="/shapes/circle.svg" alt="" class="w-9 h-9 mb-6" />
+      <h3 class="font-display font-semibold text-xl mb-2">Historial y tareas</h3>
+      <p class="text-[var(--c-mist)]">
+        Cada decisión queda registrada: qué se aceptó, qué se rechazó y por qué. Tu memoria
+        institucional, sin depender de la memoria de nadie.
+      </p>
+    </div>
+    <div class="card-hover rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8">
+      <img src="/shapes/triangle.svg" alt="" class="w-9 h-9 mb-6" />
+      <h3 class="font-display font-semibold text-xl mb-2">Reportes operativos</h3>
+      <p class="text-[var(--c-mist)]">
+        "Se tapó el baño", "se acabó el material", "se fue la luz" — lo que llega por WhatsApp
+        o Telegram, aterriza aquí como ticket, no como mensaje perdido en un chat de 300 no leídos.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CÓMO FUNCIONA ============ -->
+<section id="como-funciona" class="py-24 lg:py-32 bg-[var(--c-nebula)] border-y border-[var(--c-line)]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-2xl mb-16">
+      <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-comet)]">La secuencia de lanzamiento</span>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mt-4">Así se conecta tu operación al espacio.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-5 gap-6">
+      <div class="md:col-span-1">
+        <p class="font-mono text-5xl font-bold text-[var(--c-solar)]/30">01</p>
+        <h3 class="font-display font-semibold text-lg mt-3">Sign in y cuestionario</h3>
+        <p class="text-[var(--c-mist)] text-sm mt-2">Nos cuentas qué mueve tu negocio. Nosotros armamos los módulos de ERP que sí necesitas.</p>
+      </div>
+      <div class="md:col-span-1">
+        <p class="font-mono text-5xl font-bold text-[var(--c-solar)]/30">02</p>
+        <h3 class="font-display font-semibold text-lg mt-3">Conectamos tus canales</h3>
+        <p class="text-[var(--c-mist)] text-sm mt-2">Redes, ERP, WhatsApp y Telegram, vinculados con API key. Un solo lugar, no seis pestañas.</p>
+      </div>
+      <div class="md:col-span-1">
+        <p class="font-mono text-5xl font-bold text-[var(--c-solar)]/30">03</p>
+        <h3 class="font-display font-semibold text-lg mt-3">AndRho observa</h3>
+        <p class="text-[var(--c-mist)] text-sm mt-2">Trackea, mide y aprende de forma continua. Es tu departamento de Big Data, sin nómina extra.</p>
+      </div>
+      <div class="md:col-span-1">
+        <p class="font-mono text-5xl font-bold text-[var(--c-solar)]/30">04</p>
+        <h3 class="font-display font-semibold text-lg mt-3">Tú decides</h3>
+        <p class="text-[var(--c-mist)] text-sm mt-2">Cada sugerencia se acepta, rechaza o comenta. La decisión final siempre es tuya.</p>
+      </div>
+      <div class="md:col-span-1">
+        <p class="font-mono text-5xl font-bold text-[var(--c-solar)]/30">05</p>
+        <h3 class="font-display font-semibold text-lg mt-3">Entran los Creators</h3>
+        <p class="text-[var(--c-mist)] text-sm mt-2">Si hace falta diseño o desarrollo, buscamos a alguien de la tripulación para resolverlo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CREATORS ============ -->
+<section id="creators" class="py-24 lg:py-32 max-w-7xl mx-auto px-6 lg:px-10">
+  <div class="grid lg:grid-cols-2 gap-16 items-center">
+    <div>
+      <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-plasma)]">AndRho Creators</span>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mt-4">
+        Diseñadores y devs, trabajando bajo su propia física.
+      </h2>
+      <p class="text-[var(--c-mist)] text-lg mt-5">
+        Ninguna tarea se asigna a la fuerza. Nuestro algoritmo de matching la ofrece a quienes
+        califican, y la toma quien de verdad tiene el tiempo y los recursos. La velocidad con la que
+        entregas ajusta tu pago — a favor o en contra, como cualquier buen sistema con retroalimentación.
+      </p>
+      <ul class="mt-8 space-y-4">
+        <li class="flex gap-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--c-comet)] mt-2 shrink-0"></span>
+          <p class="text-[var(--c-mist)]"><span class="text-[var(--c-stardust)] font-medium">Matching, no asignación.</span> Las tareas se ofrecen a quien encaja, no se imponen.</p>
+        </li>
+        <li class="flex gap-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--c-comet)] mt-2 shrink-0"></span>
+          <p class="text-[var(--c-mist)]"><span class="text-[var(--c-stardust)] font-medium">Pago dinámico.</span> Entregar rápido suma extras; entregar tarde, resta. Los tiempos los calcula la app según la tarea.</p>
+        </li>
+        <li class="flex gap-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--c-comet)] mt-2 shrink-0"></span>
+          <p class="text-[var(--c-mist)]"><span class="text-[var(--c-stardust)] font-medium">On-demand real.</span> Te suscribes, te ofrecen trabajo cuando puedes tomarlo. Sin jefe asignándote turnos.</p>
+        </li>
+      </ul>
+      <a href="#signin" class="inline-block mt-9 font-semibold px-6 py-3.5 rounded-full border border-[var(--c-line)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">
+        Unirme como Creator
+      </a>
+    </div>
+    <div class="relative rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8">
+      <img src="/shapes/zigzag.svg" alt="" class="shape absolute -top-8 -right-8 w-20 h-20 opacity-80 animate-float-slow" />
+      <p class="font-mono text-xs uppercase tracking-widest text-[var(--c-mist)] mb-6">Tarea disponible</p>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between border-b border-[var(--c-line)] pb-4">
+          <span class="text-sm text-[var(--c-mist)]">Tipo</span>
+          <span class="font-medium">Rediseño de landing</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-[var(--c-line)] pb-4">
+          <span class="text-sm text-[var(--c-mist)]">Match</span>
+          <span class="font-medium text-[var(--c-comet)]">94% compatible</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-[var(--c-line)] pb-4">
+          <span class="text-sm text-[var(--c-mist)]">Ventana</span>
+          <span class="font-medium">48 horas</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-[var(--c-mist)]">Bono por velocidad</span>
+          <span class="font-medium text-[var(--c-solar)]">+15%</span>
+        </div>
+      </div>
+      <button class="w-full btn-solar font-semibold py-3 rounded-full mt-8 transition-colors">Aceptar tarea</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ B2B ============ -->
+<section class="py-24 lg:py-32 bg-[var(--c-nebula)] border-y border-[var(--c-line)]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
+    <div class="order-2 lg:order-1 rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-full bg-[var(--c-panel-2)] flex items-center justify-center">
+          <img src="/shapes/hexagon.svg" alt="" class="w-6 h-6" />
+        </div>
+        <div>
+          <p class="font-medium">Quark Logística</p>
+          <p class="text-xs text-[var(--c-mist)] font-mono">exceso de inventario en bodega B</p>
+        </div>
+      </div>
+      <div class="text-center text-[var(--c-mist)] font-mono text-xs my-3">— match B2B sugerido —</div>
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-[var(--c-panel-2)] flex items-center justify-center">
+          <img src="/shapes/diamond.svg" alt="" class="w-6 h-6" />
+        </div>
+        <div>
+          <p class="font-medium">Nova Textiles</p>
+          <p class="text-xs text-[var(--c-mist)] font-mono">necesidad recurrente del mismo insumo</p>
+        </div>
+      </div>
+    </div>
+    <div class="order-1 lg:order-2">
+      <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-comet)]">B2B entre clientes AndRho</span>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mt-4">
+        A veces la mejor sugerencia es otro negocio.
+      </h2>
+      <p class="text-[var(--c-mist)] text-lg mt-5">
+        Cuando el sistema detecta que la necesidad de un cliente coincide con la capacidad de otro
+        dentro de la red AndRho, no se queda callado: sugiere la conexión. Menos intermediarios,
+        más negocios que se resuelven entre sí — literalmente, gravedad mutua.
+      </p>
+      <a href="#planes" class="inline-block mt-8 font-medium text-[var(--c-comet)] hover:underline">
+        Ver en qué plan está disponible →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANES ============ -->
+<section id="planes" class="py-24 lg:py-32 max-w-7xl mx-auto px-6 lg:px-10">
+  <div class="max-w-2xl mx-auto text-center mb-16">
+    <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-plasma)]">Planes</span>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mt-4">Elige tu rango de misión.</h2>
+    <p class="text-[var(--c-mist)] text-lg mt-5">Sube de rango cuando tu operación lo pida. Sin letra pequeña, solo física.</p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8 flex flex-col">
+      <h3 class="font-display font-semibold text-xl">Cadete</h3>
+      <p class="text-[var(--c-mist)] text-sm mt-1">Para startups despegando</p>
+      <p class="font-display font-bold text-4xl mt-6">$Q<span class="text-lg font-normal text-[var(--c-mist)]">/mes</span></p>
+      <ul class="mt-6 space-y-3 text-sm text-[var(--c-mist)] flex-1">
+        <li>· 1 canal digital conectado</li>
+        <li>· Sugerencias básicas</li>
+        <li>· Historial de 30 días</li>
+        <li>· Reportes operativos vía WhatsApp</li>
+      </ul>
+      <a href="#signin" class="mt-8 text-center font-semibold px-6 py-3 rounded-full border border-[var(--c-line)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">Empezar</a>
+    </div>
+
+    <div class="rounded-2xl border-2 border-[var(--c-solar)] bg-[var(--c-panel-2)] p-8 flex flex-col relative">
+      <span class="absolute -top-3 left-8 bg-[var(--c-solar)] text-[var(--c-void)] text-xs font-semibold px-3 py-1 rounded-full">más elegido</span>
+      <h3 class="font-display font-semibold text-xl">Piloto</h3>
+      <p class="text-[var(--c-mist)] text-sm mt-1">Para negocios en crecimiento</p>
+      <p class="font-display font-bold text-4xl mt-6">$Q<span class="text-lg font-normal text-[var(--c-mist)]">/mes</span></p>
+      <ul class="mt-6 space-y-3 text-sm text-[var(--c-mist)] flex-1">
+        <li>· Canales digitales ilimitados</li>
+        <li>· Sugerencias predictivas</li>
+        <li>· Historial completo</li>
+        <li>· Acceso a AndRho Creators</li>
+        <li>· Matching B2B</li>
+      </ul>
+      <a href="#signin" class="mt-8 text-center btn-solar font-semibold px-6 py-3 rounded-full transition-colors">Empezar</a>
+    </div>
+
+    <div class="rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-8 flex flex-col">
+      <h3 class="font-display font-semibold text-xl">Comandante</h3>
+      <p class="text-[var(--c-mist)] text-sm mt-1">Para corporaciones</p>
+      <p class="font-display font-bold text-4xl mt-6">A medida</p>
+      <ul class="mt-6 space-y-3 text-sm text-[var(--c-mist)] flex-1">
+        <li>· Multi-sucursal y multi-marca</li>
+        <li>· Integraciones ERP a medida</li>
+        <li>· Soporte prioritario</li>
+        <li>· Onboarding asistido</li>
+      </ul>
+      <a href="#signin" class="mt-8 text-center font-semibold px-6 py-3 rounded-full border border-[var(--c-line)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">Hablar con ventas</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAST RESOURCE TO CONVINCE ============ -->
+<section class="relative py-28 lg:py-36 overflow-hidden bg-[var(--c-nebula)] border-y border-[var(--c-line)]">
+  <img src="/shapes/ring.svg" alt="" class="shape absolute top-10 left-[8%] w-24 h-24 opacity-30 animate-float-slower" />
+  <img src="/shapes/blob.svg" alt="" class="shape absolute bottom-10 right-[10%] w-20 h-20 opacity-30 animate-float-slow" />
+  <div class="max-w-4xl mx-auto px-6 text-center relative">
+    <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-6xl leading-tight">
+      ¿Y si tu próxima gran decisión<br class="hidden sm:block"/> <span class="text-gradient">ya está calculada?</span>
+    </h2>
+    <p class="text-[var(--c-mist)] text-lg mt-6 max-w-xl mx-auto">
+      No es magia, es estadística con buena actitud. Conecta tu operación y deja que AndRho
+      encuentre lo que ya está ahí, esperando a que alguien lo note.
+    </p>
+    <a href="#signin" class="inline-block mt-10 btn-solar font-semibold px-8 py-4 rounded-full text-lg transition-colors">
+      Empezar sign in
+    </a>
+  </div>
+</section>
+
+<!-- ============ MINIJUEGO ============ -->
+<section id="minijuego" class="py-24 lg:py-32 max-w-5xl mx-auto px-6 lg:px-10">
+  <div class="text-center max-w-xl mx-auto mb-10">
+    <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-comet)]">Modo desvío de emergencia</span>
+    <h2 class="font-display font-bold text-3xl sm:text-4xl mt-4">Mientras cargan tus reportes, esquiva asteroides.</h2>
+    <p class="text-[var(--c-mist)] mt-4">Flechas o A/D para moverte, espacio para disparar. En móvil, usa los botones.</p>
+  </div>
+
+  <div class="rounded-2xl border border-[var(--c-line)] bg-[var(--c-panel)] p-4 sm:p-6">
+    <div class="flex items-center justify-between mb-4 font-mono text-sm">
+      <span>Puntos: <span id="score" class="text-[var(--c-solar)] font-semibold">0</span></span>
+      <span id="gameStatus" class="text-[var(--c-mist)]">presiona una tecla para empezar</span>
+    </div>
+    <canvas id="gameCanvas" width="800" height="420" class="w-full rounded-lg border border-[var(--c-line)]"></canvas>
+    <div class="flex sm:hidden justify-center gap-3 mt-4">
+      <button id="btnLeft" class="w-16 h-12 rounded-lg border border-[var(--c-line)] font-mono">◀</button>
+      <button id="btnShoot" class="w-16 h-12 rounded-lg border border-[var(--c-solar)] text-[var(--c-solar)] font-mono">●</button>
+      <button id="btnRight" class="w-16 h-12 rounded-lg border border-[var(--c-line)] font-mono">▶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="signin" class="border-t border-[var(--c-line)] bg-[var(--c-nebula)]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+    <div class="grid md:grid-cols-5 gap-10">
+      <div class="md:col-span-2">
+        <p class="font-display font-bold text-xl flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[var(--c-solar)]"></span>
+          &ρ (AndRho)
+        </p>
+        <p class="text-[var(--c-mist)] text-sm mt-4 max-w-xs">
+          El departamento de Big Data que tu empresa no sabía que necesitaba, empacado en
+          una plataforma. Pensado para escalar sin perder el piso.
+        </p>
+        <div class="flex gap-3 mt-6">
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full border border-[var(--c-line)] flex items-center justify-center hover:border-[var(--c-comet)]/50 transition-colors"><img src="/shapes/instagram.svg" class="w-4 h-4" alt=""/></a>
+          <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-[var(--c-line)] flex items-center justify-center hover:border-[var(--c-comet)]/50 transition-colors"><img src="/shapes/linkedin.svg" class="w-4 h-4" alt=""/></a>
+          <a href="#" aria-label="X" class="w-9 h-9 rounded-full border border-[var(--c-line)] flex items-center justify-center hover:border-[var(--c-comet)]/50 transition-colors"><img src="/shapes/cross.svg" class="w-4 h-4" alt=""/></a>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-mono text-xs uppercase tracking-widest text-[var(--c-mist)] mb-4">Producto</p>
+        <ul class="space-y-3 text-sm text-[var(--c-mist)]">
+          <li><a href="#producto" class="hover:text-[var(--c-stardust)]">Panel de sugerencias</a></li>
+          <li><a href="#como-funciona" class="hover:text-[var(--c-stardust)]">Cómo funciona</a></li>
+          <li><a href="#creators" class="hover:text-[var(--c-stardust)]">AndRho Creators</a></li>
+          <li><a href="#planes" class="hover:text-[var(--c-stardust)]">Planes</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-mono text-xs uppercase tracking-widest text-[var(--c-mist)] mb-4">Empresa</p>
+        <ul class="space-y-3 text-sm text-[var(--c-mist)]">
+          <li><a href="#" class="hover:text-[var(--c-stardust)]">Sobre nosotros</a></li>
+          <li><a href="#" class="hover:text-[var(--c-stardust)]">Blog</a></li>
+          <li><a href="#" class="hover:text-[var(--c-stardust)]">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-mono text-xs uppercase tracking-widest text-[var(--c-mist)] mb-4">Empieza ahora</p>
+        <form class="flex flex-col gap-3" onsubmit="return false;">
+          <input type="email" required placeholder="tucorreo@empresa.com" class="bg-[var(--c-panel)] border border-[var(--c-line)] rounded-lg px-4 py-2.5 text-sm focus-visible:outline-none placeholder:text-[var(--c-mist)]" />
+          <button type="submit" class="btn-solar text-sm font-semibold py-2.5 rounded-lg transition-colors">Sign in gratis</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-[var(--c-line)] mt-12 pt-8 text-xs text-[var(--c-mist)] font-mono">
+      <p>© 2026 AndRho. Con cariño y algo de entropía negativa desde el planeta Tierra</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-[var(--c-stardust)]">Privacidad</a>
+        <a href="#" class="hover:text-[var(--c-stardust)]">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---------- Terminal typing animation ----------
+  const lines = [
+    "> analizando 14,382 eventos del último mes...",
+    "> sugerencia: reabastecer tornillos M4 antes del jueves.",
+    "> pico detectado en Instagram Ads a las 8:00pm.",
+    "> anomalía: 3 tickets sin responder hace 2 horas.",
+    "> reporte operativo (WhatsApp): \"se fue la luz en zona 10\".",
+    "> predicción: rotación de inventario +12% este trimestre."
+  ];
+  const el = document.getElementById('typing-line');
+  let li = 0, ci = 0, deleting = false;
+
+  function typeLoop(){
+    const current = lines[li];
+    if(!deleting){
+      ci++;
+      el.textContent = current.slice(0, ci);
+      if(ci === current.length){
+        deleting = true;
+        setTimeout(typeLoop, 1400);
+        return;
+      }
+    } else {
+      ci--;
+      el.textContent = current.slice(0, ci);
+      if(ci === 0){
+        deleting = false;
+        li = (li + 1) % lines.length;
+      }
+    }
+    setTimeout(typeLoop, deleting ? 18 : 32);
+  }
+  typeLoop();
+
+  // ---------- Mini game: "desvío de emergencia" (asteroids-lite) ----------
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const statusEl = document.getElementById('gameStatus');
+  const W = canvas.width, H = canvas.height;
+
+  let ship, bullets, rocks, score, running, keys;
+
+  function resetGame(){
+    ship = { x: W/2, y: H-40, w: 26, h: 20, speed: 6 };
+    bullets = [];
+    rocks = [];
+    score = 0;
+    running = true;
+    keys = {};
+    scoreEl.textContent = '0';
+    statusEl.textContent = 'en curso — ¡buena suerte!';
+  }
+  resetGame();
+  running = false;
+  statusEl.textContent = 'presiona una tecla para empezar';
+
+  function spawnRock(){
+    const size = 16 + Math.random()*22;
+    rocks.push({
+      x: Math.random()*(W-size),
+      y: -size,
+      size,
+      speed: 1.2 + Math.random()*2.2,
+      rot: Math.random()*Math.PI,
+      spin: (Math.random()-0.5)*0.05
+    });
+  }
+
+  let spawnTimer = 0;
+  function update(){
+    if(!running) return;
+
+    if(keys['ArrowLeft'] || keys['a']) ship.x -= ship.speed;
+    if(keys['ArrowRight'] || keys['d']) ship.x += ship.speed;
+    ship.x = Math.max(ship.w, Math.min(W-ship.w, ship.x));
+
+    bullets.forEach(b => b.y -= 8);
+    bullets = bullets.filter(b => b.y > -10);
+
+    spawnTimer++;
+    if(spawnTimer > 40){ spawnRock(); spawnTimer = 0; }
+
+    rocks.forEach(r => { r.y += r.speed; r.rot += r.spin; });
+
+    // collisions: bullet vs rock
+    for(let i = rocks.length-1; i>=0; i--){
+      const r = rocks[i];
+      for(let j = bullets.length-1; j>=0; j--){
+        const b = bullets[j];
+        const dx = b.x-r.x, dy = b.y-r.y;
+        if(Math.sqrt(dx*dx+dy*dy) < r.size*0.6){
+          rocks.splice(i,1);
+          bullets.splice(j,1);
+          score += 10;
+          scoreEl.textContent = score;
+          break;
+        }
+      }
+    }
+
+    // collisions: rock vs ship
+    rocks.forEach(r => {
+      const dx = r.x-ship.x, dy = r.y-ship.y;
+      if(Math.sqrt(dx*dx+dy*dy) < r.size*0.6 + 10 && r.y > 0){
+        running = false;
+        statusEl.textContent = 'colisión detectada — presiona una tecla para reintentar';
+      }
+    });
+
+    rocks = rocks.filter(r => r.y < H+40);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // ship (triangle)
+    ctx.save();
+    ctx.translate(ship.x, ship.y);
+    ctx.beginPath();
+    ctx.moveTo(0,-14);
+    ctx.lineTo(12,12);
+    ctx.lineTo(-12,12);
+    ctx.closePath();
+    ctx.fillStyle = '#FFC745';
+    ctx.fill();
+    ctx.restore();
+
+    // bullets
+    ctx.fillStyle = '#6EE7FF';
+    bullets.forEach(b => { ctx.fillRect(b.x-2, b.y-8, 4, 8); });
+
+    // rocks
+    rocks.forEach(r => {
+      ctx.save();
+      ctx.translate(r.x, r.y);
+      ctx.rotate(r.rot);
+      ctx.strokeStyle = '#FF2162';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const sides = 6;
+      for(let i=0;i<sides;i++){
+        const a = (i/sides)*Math.PI*2;
+        const rad = r.size*(0.8+Math.random()*0.05);
+        const x = Math.cos(a)*rad, y = Math.sin(a)*rad;
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    if(!running){
+      ctx.fillStyle = 'rgba(11,10,26,0.55)';
+      ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  function loop(){
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  function shoot(){
+    if(!running) return;
+    bullets.push({x: ship.x, y: ship.y-14});
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if(!running){ resetGame(); return; }
+    keys[e.key] = true;
+    if(e.key === ' '){ e.preventDefault(); shoot(); }
+  });
+  window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+  document.getElementById('btnShoot').addEventListener('click', () => { if(!running) resetGame(); else shoot(); });
+  document.getElementById('btnLeft').addEventListener('touchstart', () => keys['ArrowLeft'] = true);
+  document.getElementById('btnLeft').addEventListener('touchend', () => keys['ArrowLeft'] = false);
+  document.getElementById('btnRight').addEventListener('touchstart', () => keys['ArrowRight'] = true);
+  document.getElementById('btnRight').addEventListener('touchend', () => keys['ArrowRight'] = false);
+})();
+</script>
+
+</body>
+</html>
