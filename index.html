@@ -252,30 +252,53 @@
         Chapter 0: El Origen
       </h2>
     </div>
-
     <div class="relative min-h-[460px]">
       <!-- Vista cinemática (Star Wars) -->
       <div id="crawlView" class="crawl-viewport playing">
-        <p class="crawl-text">
+        <p class="crawl-text text-2xl sm:text-3xl lg:text-4xl">
           Hace algunos meses, un grupo de personas notó algo raro:<br/>
           el ERP lo sabía todo. Las redes lo sabían todo.<br/>
           El equipo, en cambio, se enteraba de casi todo por WhatsApp —<br/>
           y siempre un día tarde.<br/><br/>
-
+ 
           Así nació AndRho: un puente entre lo operativo y lo ejecutivo,<br/>
           un lugar donde los datos dejan de esconderse<br/>
           y empiezan a sugerir.<br/><br/>
-
+ 
           Hoy el backend sigue en construcción.<br/>
           Cada commit es un pequeño empujón de gravedad hacia el lanzamiento.<br/>
           Esta misma página se actualiza sola, directo desde el repositorio,<br/>
           para que veas el progreso sin preguntar "¿ya casi?"<br/>
           por quinta vez esta semana.<br/><br/>
-
+ 
           La misión sigue en curso.<br/>
           Únete a la tripulación.
         </p>
       </div>
+ 
+      <!-- Vista normal -->
+      <div id="normalView" class="normal-view">
+        <div class="space-y-5 text-[var(--c-mist)] text-lg leading-relaxed">
+          <p>
+            Hace algunos meses, un grupo de personas notó algo raro: el ERP lo sabía todo, las redes
+            lo sabían todo, pero el equipo se enteraba de casi todo por WhatsApp — y siempre un día tarde.
+          </p>
+          <p>
+            Así nació <span class="text-[var(--c-stardust)] font-medium">AndRho</span>: un puente entre lo
+            operativo y lo ejecutivo, un lugar donde los datos dejan de esconderse y empiezan a sugerir.
+          </p>
+          <p>
+            Hoy el backend sigue en construcción. Cada commit es un pequeño empujón de gravedad hacia el
+            lanzamiento. Esta misma página se actualiza sola, directo desde el repositorio, para que veas
+            el progreso sin preguntar "¿ya casi?" por quinta vez esta semana.
+          </p>
+          <p class="text-[var(--c-stardust)] font-medium">
+            La misión sigue en curso. Únete a la tripulación.
+          </p>
+        </div>
+      </div>
+    </div>
+ 
 
       <!-- Vista normal -->
       <div id="normalView" class="normal-view">
@@ -303,7 +326,7 @@
     <div class="flex justify-center mt-14">
       <button id="toggleModeBtn" type="button" aria-pressed="true"
         class="font-mono text-sm px-5 py-2.5 rounded-full border border-[var(--c-line)] text-[var(--c-stardust)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">
-        📄 Modo normal
+        Me aburre Star Warzzzz
       </button>
     </div>
   </div>
@@ -394,14 +417,14 @@
     toggleBtn.setAttribute('aria-pressed', String(cinematic));
 
     if(cinematic){
-      toggleBtn.textContent = '📄 Modo normal';
+      toggleBtn.textContent = 'Me aburre Star Warzzz...';
       normalView.classList.remove('is-visible');
       // reinicia la animación del crawl cada vez que se vuelve a activar
       crawlView.classList.remove('playing', 'is-hidden');
       void crawlView.offsetWidth; // fuerza reflow
       crawlView.classList.add('playing');
     } else {
-      toggleBtn.textContent = '🎬 Modo cinemático';
+      toggleBtn.textContent = 'Intro';
       crawlView.classList.add('is-hidden');
       normalView.classList.add('is-visible');
     }
