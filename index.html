@@ -152,8 +152,8 @@
     text-align: center;
     color: var(--c-solar);
     font-weight: 700;
-    font-size: 1.35rem;
     line-height: 2.1;
+    /* el tamaño ahora lo controla la clase de Tailwind en el <p>, no este CSS */
   }
   .crawl-viewport.playing .crawl-text{
     animation: crawl 34s linear infinite;
@@ -190,7 +190,7 @@
 </div>
 
 <!-- ============ NAV ============ -->
-<header class="sticky top-0 z-50 border-b border-[var(--c-line)] bg-[var(--c-void)]/80 backdrop-blur-md">
+<header id="siteHeader" class="sticky top-0 z-50 border-b border-[var(--c-line)] bg-[var(--c-void)]/80 backdrop-blur-md transition-all duration-700 ease-in-out">
   <nav class="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
     <a href="#hero" class="flex items-center gap-2 font-display font-bold text-lg tracking-tight">
       <span class="w-2.5 h-2.5 rounded-full bg-[var(--c-solar)]" style="animation: pulse-glow 2.4s ease-in-out infinite;"></span>
@@ -204,11 +204,12 @@
     </a>
   </nav>
 </header>
+
 <!-- ============ HERO: EN CONSTRUCCIÓN ============ -->
 <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20">
   <!-- Estación espacial en construcción: reemplaza este SVG -->
   <img src="/shapes/rocket-station-construction.svg" alt="Estación espacial AndRho en construcción"
-       class="h-60 pointer-events-none select-none" />
+       class="w-56 sm:w-64 lg:w-72 pointer-events-none select-none" />
 
   <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-[var(--c-stardust)] mt-8">
     En construcción
@@ -221,6 +222,7 @@
     </a>
   </div>
 </section>
+
 <!-- ============ BOTTOM TAPE ============ -->
 <div class="tape h-8 overflow-hidden relative">
   <div class="flex gap-10 h-full items-center whitespace-nowrap animate-marquee w-max px-4 mix-blend-multiply opacity-90">
@@ -233,11 +235,12 @@
 <section id="historia" class="story-stage overflow-hidden">
   <div class="relative max-w-4xl mx-auto px-6 lg:px-10 py-24 lg:py-32">
     <div class="text-center mb-14">
-	    <!-- <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-plasma)]">El origen</span>-->
+      <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-plasma)]">El origen</span>
       <h2 class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mt-3 text-[var(--c-stardust)]">
-        Chapter 0: El Origen
+        La historia, a tu manera de leerla.
       </h2>
     </div>
+
     <div class="relative min-h-[460px]">
       <!-- Vista cinemática (Star Wars) -->
       <div id="crawlView" class="crawl-viewport playing">
@@ -246,45 +249,21 @@
           el ERP lo sabía todo. Las redes lo sabían todo.<br/>
           El equipo, en cambio, se enteraba de casi todo por WhatsApp —<br/>
           y siempre un día tarde.<br/><br/>
- 
+
           Así nació AndRho: un puente entre lo operativo y lo ejecutivo,<br/>
           un lugar donde los datos dejan de esconderse<br/>
           y empiezan a sugerir.<br/><br/>
- 
+
           Hoy el backend sigue en construcción.<br/>
           Cada commit es un pequeño empujón de gravedad hacia el lanzamiento.<br/>
           Esta misma página se actualiza sola, directo desde el repositorio,<br/>
           para que veas el progreso sin preguntar "¿ya casi?"<br/>
           por quinta vez esta semana.<br/><br/>
- 
+
           La misión sigue en curso.<br/>
           Únete a la tripulación.
         </p>
       </div>
- 
-      <!-- Vista normal -->
-      <div id="normalView" class="normal-view">
-        <div class="space-y-5 text-[var(--c-mist)] text-lg leading-relaxed">
-          <p>
-            Hace algunos meses, un grupo de personas notó algo raro: el ERP lo sabía todo, las redes
-            lo sabían todo, pero el equipo se enteraba de casi todo por WhatsApp — y siempre un día tarde.
-          </p>
-          <p>
-            Así nació <span class="text-[var(--c-stardust)] font-medium">AndRho</span>: un puente entre lo
-            operativo y lo ejecutivo, un lugar donde los datos dejan de esconderse y empiezan a sugerir.
-          </p>
-          <p>
-            Hoy el backend sigue en construcción. Cada commit es un pequeño empujón de gravedad hacia el
-            lanzamiento. Esta misma página se actualiza sola, directo desde el repositorio, para que veas
-            el progreso sin preguntar "¿ya casi?" por quinta vez esta semana.
-          </p>
-          <p class="text-[var(--c-stardust)] font-medium">
-            La misión sigue en curso. Únete a la tripulación.
-          </p>
-        </div>
-      </div>
-    </div>
- 
 
       <!-- Vista normal -->
       <div id="normalView" class="normal-view">
@@ -312,7 +291,7 @@
     <div class="flex justify-center mt-14">
       <button id="toggleModeBtn" type="button" aria-pressed="true"
         class="font-mono text-sm px-5 py-2.5 rounded-full border border-[var(--c-line)] text-[var(--c-stardust)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">
-        Me aburre Star Warzzzz
+        📄 Modo normal
       </button>
     </div>
   </div>
@@ -366,26 +345,27 @@
     <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-plasma)]">Lista de espera</span>
     <h2 class="font-display font-bold text-3xl sm:text-4xl mt-4">Resérvate un asiento en el despegue.</h2>
     <p class="text-[var(--c-mist)] text-lg mt-4 max-w-md mx-auto">
-      Te avisamos apenas el backend termine de ensamblarse — nada de spam, solo lo justo
-      para que no te tomen por sorpresa las luces de lanzamiento.
+      Al unirte a la lista de espera obtienes acceso anticipado antes del lanzamiento público,
+      un único aviso cuando el backend esté listo para volar (nada de boletines semanales) y
+      la posibilidad de entrar como beta tester si tu negocio calza con la primera tanda.
     </p>
 
-    <form id="waitlistForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-8" onsubmit="return false;">
-      <label for="waitlistEmail" class="sr-only">Correo electrónico</label>
-      <input id="waitlistEmail" type="email" required placeholder="tucorreo@empresa.com"
-        class="flex-1 bg-[var(--c-panel)] border border-[var(--c-line)] rounded-full px-5 py-3 text-sm focus-visible:outline-none placeholder:text-[var(--c-mist)]" />
-      <button type="submit" class="btn-solar text-sm font-semibold px-6 py-3 rounded-full transition-colors">
-        Unirme a la lista
-      </button>
-    </form>
-    <p id="waitlistMsg" class="font-mono text-xs text-[var(--c-comet)] mt-4 h-4"></p>
+    <a href="https://andrho.com/waitlist" target="_blank" rel="noopener"
+       class="btn-solar inline-flex items-center gap-2 text-base font-semibold px-8 py-4 rounded-full mt-8 transition-colors">
+      Completar misión
+      <span aria-hidden="true">🚀</span>
+    </a>
+
+    <p class="font-mono text-xs text-[var(--c-mist)] mt-4">
+      Te toma menos de un minuto. Lo cronometramos.
+    </p>
 
     <div id="creators-cta" class="flex flex-wrap items-center justify-center gap-4 mt-10">
       <a href="#metricas" class="text-sm text-[var(--c-mist)] hover:text-[var(--c-stardust)] transition-colors">Ver telemetría del repo ↑</a>
     </div>
 
     <p class="font-mono text-xs text-[var(--c-mist)] mt-16">
-      © 2026 AndRho. Con cariño y algo de entropía negativa desde esta galaxia.
+      © 2026 AndRho. Con cariño y algo de entropía negativa desde Latinoamérica.
     </p>
   </div>
 </footer>
@@ -403,28 +383,37 @@
     toggleBtn.setAttribute('aria-pressed', String(cinematic));
 
     if(cinematic){
-      toggleBtn.textContent = 'Me aburre Star Warzzz...';
+      toggleBtn.textContent = '📄 Modo normal';
       normalView.classList.remove('is-visible');
       // reinicia la animación del crawl cada vez que se vuelve a activar
       crawlView.classList.remove('playing', 'is-hidden');
       void crawlView.offsetWidth; // fuerza reflow
       crawlView.classList.add('playing');
     } else {
-      toggleBtn.textContent = 'Intro';
+      toggleBtn.textContent = '🎬 Modo cinemático';
       crawlView.classList.add('is-hidden');
       normalView.classList.add('is-visible');
     }
   });
 
-  // ---------- Waitlist form (placeholder: conecta tu backend/formulario real) ----------
-  const form = document.getElementById('waitlistForm');
-  const msg = document.getElementById('waitlistMsg');
-  form.addEventListener('submit', () => {
-    msg.textContent = '¡Listo! Ya estás en la tripulación. Te escribimos antes del despegue.';
-  });
+  // ---------- Header: efecto "vanish" al entrar a la sección historia ----------
+  const siteHeader = document.getElementById('siteHeader');
+  const historiaSection = document.getElementById('historia');
+  if(siteHeader && historiaSection){
+    const headerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          siteHeader.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+        } else {
+          siteHeader.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+        }
+      });
+    }, { threshold: 0.15 });
+    headerObserver.observe(historiaSection);
+  }
 
   // ---------- GitHub metrics ----------
-  const GITHUB_REPO = 'IngeniosoHacker/andrho'; // TODO: reemplaza con tu repo real, ej. "andrho-team/andrho-backend"
+  const GITHUB_REPO = 'usuario/andrho'; // TODO: reemplaza con tu repo real, ej. "andrho-team/andrho-backend"
 
   async function loadGithubStats(){
     const statusEl = document.getElementById('githubStatus');
