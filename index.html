@@ -204,37 +204,23 @@
     </a>
   </nav>
 </header>
-
 <!-- ============ HERO: EN CONSTRUCCIÓN ============ -->
-<section id="hero" class="relative min-h-[92vh] flex flex-col items-center justify-center text-center overflow-hidden bg-starfield px-6">
-  <div class="absolute inset-0 grid-overlay [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,black,transparent)] opacity-30"></div>
-
+<section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20">
   <!-- Estación espacial en construcción: reemplaza este SVG -->
   <img src="/shapes/rocket-station-construction.svg" alt="Estación espacial AndRho en construcción"
-       class="absolute inset-x-0 top-1/2 -translate-y-1/2 mx-auto w-[92%] max-w-4xl opacity-90 animate-float-slow pointer-events-none select-none" />
+       class="h-60 pointer-events-none select-none" />
 
-  <div class="relative z-10 max-w-2xl mx-auto pt-24 pb-10">
-    <span class="font-mono text-xs tracking-widest uppercase text-[var(--c-solar)] border border-[var(--c-solar)]/40 rounded-full px-4 py-1.5 bg-[var(--c-void)]/70 backdrop-blur">
-      🚧 backend en construcción — sin gravedad, sin excusas
-    </span>
+  <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-[var(--c-stardust)] mt-8">
+    En construcción
+  </h1>
 
-    <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl leading-[1.05] mt-6 bg-[var(--c-void)]/40 backdrop-blur-sm rounded-2xl px-2 py-2">
-      Estamos ensamblando esto <span class="text-gradient">en órbita.</span> Literal.
-    </h1>
-    <p class="text-[var(--c-mist)] text-lg mt-6 max-w-lg mx-auto bg-[var(--c-void)]/40 backdrop-blur-sm rounded-xl px-3 py-2">
-      El backend sigue en fase de ensamblaje. Mientras tanto, aquí abajo tienes las coordenadas
-      del proyecto — y un lugar en la fila para cuando encendamos motores.
-    </p>
-
-    <div class="flex flex-wrap items-center justify-center gap-4 mt-9">
-      <a href="#historia" class="btn-solar font-semibold px-6 py-3.5 rounded-full transition-colors">Saber más</a>
-      <a href="#lista-espera" class="font-medium px-6 py-3.5 rounded-full border border-[var(--c-line)] bg-[var(--c-void)]/50 backdrop-blur hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">
-        Unirme a la lista de espera
-      </a>
-    </div>
+  <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+    <a href="#historia" class="btn-solar font-semibold px-6 py-3.5 rounded-full transition-colors">Saber más</a>
+    <a href="#lista-espera" class="font-medium px-6 py-3.5 rounded-full border border-[var(--c-line)] hover:border-[var(--c-comet)]/50 hover:text-[var(--c-comet)] transition-colors">
+      Unirme a la lista de espera
+    </a>
   </div>
 </section>
-
 <!-- ============ BOTTOM TAPE ============ -->
 <div class="tape h-8 overflow-hidden relative">
   <div class="flex gap-10 h-full items-center whitespace-nowrap animate-marquee w-max px-4 mix-blend-multiply opacity-90">
@@ -399,7 +385,7 @@
     </div>
 
     <p class="font-mono text-xs text-[var(--c-mist)] mt-16">
-      © 2026 AndRho. Con cariño y algo de entropía negativa desde Latinoamérica.
+      © 2026 AndRho. Con cariño y algo de entropía negativa desde esta galaxia.
     </p>
   </div>
 </footer>
