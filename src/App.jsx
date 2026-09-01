@@ -3,6 +3,7 @@ import Hero from './components/sections/Hero.jsx'
 import Features from './components/sections/Features.jsx'
 import Waitlist from './components/sections/Waitlist.jsx'
 import MissionForm from './components/sections/MissionForm.jsx'
+import MissionGame from './components/sections/MissionGame.jsx'
 import LiveProgress from './components/sections/LiveProgress.jsx'
 import Footer from './components/sections/Footer.jsx'
 
@@ -18,6 +19,7 @@ export default function App() {
       <Features />
       <Waitlist />
       <MissionForm />
+      <MissionGame />
       <LiveProgress />
       <Footer />
     </div>
