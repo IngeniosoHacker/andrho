@@ -68,10 +68,6 @@ body {
   0%, 100% { box-shadow: 0 0 0 0 rgba(255, 199, 69, 0.35); }
   50% { box-shadow: 0 0 0 12px rgba(255, 199, 69, 0); }
 }
-@keyframes crawl {
-  0% { top: 100%; transform: translate(-50%, 0) rotateX(25deg); }
-  100% { top: -260%; transform: translate(-50%, 0) rotateX(25deg); }
-}
 @keyframes shine {
   to { background-position: 200% center; }
 }
@@ -83,6 +79,7 @@ body {
 .animate-float-slow { animation: float-slow 7s ease-in-out infinite; }
 .animate-float-slower { animation: float-slower 9s ease-in-out infinite; }
 .animate-marquee { animation: marquee-x 22s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }
 .cursor-blink { animation: blink 1s step-start infinite; }
 
 .text-gradient {
@@ -90,6 +87,12 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.animate-shine {
+  animation-name: shine;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 .shiny-text {
@@ -110,6 +113,14 @@ body {
   background: linear-gradient(180deg, rgba(245, 242, 255, 0.06), rgba(245, 242, 255, 0.02));
   border: 1px solid rgba(245, 242, 255, 0.08);
   backdrop-filter: blur(20px);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .glow-orb {

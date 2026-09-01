@@ -235,7 +235,7 @@ export default function MissionForm() {
               disabled={!canAdvance}
               className="btn-solar rounded-full px-6 py-3 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {step < STEPS.length - 1 ? 'Siguiente →' : '🚀 Completar misión'}
+              {step < STEPS.length - 1 ? 'Siguiente →' : 'Completar misión'}
             </button>
           </div>
         </form>

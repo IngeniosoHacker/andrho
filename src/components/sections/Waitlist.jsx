@@ -1,5 +1,5 @@
 import SpotlightCard from '../ui/SpotlightCard.jsx'
-import StarBorderButton from '../ui/StarBorderButton.jsx'
+import MagnetButton from '../ui/MagnetButton.jsx'
 import Reveal from '../ui/Reveal.jsx'
 import TiltedCard from '../ui/TiltedCard.jsx'
 
@@ -36,9 +36,9 @@ export default function Waitlist() {
       </div>
 
       <Reveal className="mt-16 flex flex-col items-center gap-4 text-center">
-        <StarBorderButton as="a" href="#mission-form">
-          🚀 Completar misión para reservar tu asiento
-        </StarBorderButton>
+        <MagnetButton as="a" href="#mission-form">
+          Completar misión para reservar tu asiento
+        </MagnetButton>
         <p className="font-mono text-xs text-[var(--c-mist)]">Toma menos de 3 minutos. Cero spam, cero ventas forzadas.</p>
       </Reveal>
     </section>
