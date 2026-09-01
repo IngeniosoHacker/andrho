@@ -7,12 +7,15 @@ import { GAME_THEMES, rotationFrom } from '../../lib/gameThemes.js'
 import { getDiscountTier, generateDiscountCode } from '../../lib/discountTiers.js'
 import { submitGameSession, submitThemeSegments, submitRegistration, flushPendingSync } from '../../lib/gameStorage.js'
 
-// Asteroids-lite mini-game shown when we can't reach the GitHub API (see
-// LiveProgress.jsx). Doubles as a color-scheme experiment: the interface
-// theme rotates automatically while the user plays, and per-theme
-// performance is recorded for later ANOVA analysis (analysis/anova.py) —
-// the player only ever sees how many asteroids they destroyed, never the
-// hidden scoring used for that analysis.
+// Asteroids-lite mini-game, framed to the player purely as "destroy
+// asteroids, win a discount" (see MissionGame.jsx for the section copy —
+// keep it that way). Underneath, it's also a color-scheme experiment: a
+// random starting theme is picked with no player input, then it rotates
+// through the rest automatically and unannounced while they play, and
+// per-theme performance is recorded for later ANOVA analysis
+// (analysis/anova.py). The player only ever sees how many asteroids they
+// destroyed — never the theme, the rotation, or the hidden scoring used for
+// that analysis.
 const CANVAS_W = 800
 const CANVAS_H = 420
 const ROTATION_MS = 15000 // how long each color theme gets during one session
@@ -37,7 +40,7 @@ function createEngine(startingThemeId) {
 }
 
 export default function AsteroidGame() {
-  const [phase, setPhase] = useState('theme-select') // theme-select | playing | game-over
+  const [phase, setPhase] = useState('start') // start | playing | game-over
   const [activeTheme, setActiveTheme] = useState(GAME_THEMES[0])
   const [destroyedCount, setDestroyedCount] = useState(0)
   const [finalStats, setFinalStats] = useState(null)
@@ -104,8 +107,8 @@ export default function AsteroidGame() {
     persistResults(engine, reason)
   }
 
-  function startGame(themeIndex) {
-    const order = rotationFrom(themeIndex)
+  function startGame() {
+    const order = rotationFrom(Math.floor(Math.random() * GAME_THEMES.length))
     themeOrderRef.current = order
     activeThemeRef.current = order[0]
     sessionIdRef.current = crypto.randomUUID()
@@ -336,37 +339,18 @@ export default function AsteroidGame() {
 
   return (
     <div className="mt-16">
-      {phase === 'theme-select' && (
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[var(--c-mist)]">Elige el color de tu consola</p>
-          <div className="mx-auto mt-6 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-3">
-            {GAME_THEMES.map((theme, i) => (
-              <button
-                key={theme.id}
-                type="button"
-                onClick={() => startGame(i)}
-                style={{ background: theme.panel, borderColor: theme.border, color: theme.text }}
-                className="flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition-transform hover:-translate-y-0.5"
-              >
-                <span className="flex gap-1.5">
-                  <span className="h-3 w-3 rounded-full" style={{ background: theme.ship }} />
-                  <span className="h-3 w-3 rounded-full" style={{ background: theme.bullet }} />
-                  <span className="h-3 w-3 rounded-full" style={{ background: theme.meteor }} />
-                </span>
-                {theme.label}
-              </button>
-            ))}
-          </div>
+      {phase === 'start' && (
+        <div className="mx-auto max-w-md text-center">
+          <MagnetButton onClick={startGame}>Jugar</MagnetButton>
         </div>
       )}
 
       {phase === 'playing' && (
         <div style={{ background: activeTheme.panel, borderColor: activeTheme.border }} className="mx-auto max-w-3xl rounded-2xl border p-4 sm:p-6">
-          <div className="mb-4 flex items-center justify-between font-mono text-sm" style={{ color: activeTheme.text }}>
+          <div className="mb-4 font-mono text-sm" style={{ color: activeTheme.text }}>
             <span>
               Asteroides destruidos: <span style={{ color: activeTheme.ship }} className="font-semibold">{destroyedCount}</span>
             </span>
-            <span style={{ color: activeTheme.mist }}>{activeTheme.label}</span>
           </div>
 
           <canvas
@@ -424,7 +408,7 @@ export default function AsteroidGame() {
           {!claim && !showForm && (
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               {tier.percent > 0 && <MagnetButton onClick={() => setShowForm(true)}>Reclama tu descuento</MagnetButton>}
-              <MagnetButton variant="secondary" onClick={() => setPhase('theme-select')}>
+              <MagnetButton variant="secondary" onClick={() => setPhase('start')}>
                 Jugar de nuevo
               </MagnetButton>
             </div>
@@ -472,7 +456,7 @@ export default function AsteroidGame() {
               </p>
               <button
                 type="button"
-                onClick={() => setPhase('theme-select')}
+                onClick={() => setPhase('start')}
                 className="mt-6 font-mono text-xs uppercase tracking-widest text-[var(--c-mist)] transition-colors hover:text-[var(--c-stardust)]"
               >
                 Jugar de nuevo
