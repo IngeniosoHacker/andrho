@@ -12,7 +12,7 @@ export default function Stepper({ steps, current }) {
               <span
                 className={`flex h-9 w-9 items-center justify-center rounded-full border font-mono text-sm font-semibold transition-colors ${
                   isDone
-                    ? 'border-[var(--c-solar)] bg-[var(--c-solar)] text-[var(--c-void)]'
+                    ? 'border-[var(--c-solar)] bg-[var(--c-solar)] text-[var(--c-stardust)]'
                     : isActive
                       ? 'border-[var(--c-comet)] text-[var(--c-comet)]'
                       : 'border-[var(--c-line)] text-[var(--c-mist)]'

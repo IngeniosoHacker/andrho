@@ -111,7 +111,7 @@ export default function Features() {
         </p>
         <div
           style={{ height: '620px', position: 'relative' }}
-          className="overflow-hidden rounded-3xl border border-[var(--c-line)] bg-black/40"
+          className="overflow-hidden rounded-3xl border border-[var(--c-line)] bg-[#0B1020]"
         >
           <InfiniteMenu items={MENU_ITEMS} scale={1} />
         </div>

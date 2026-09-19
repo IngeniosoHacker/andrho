@@ -94,7 +94,7 @@ export function RatingScale({ value, onChange, max = 5, labels }) {
           aria-pressed={value === n}
           className={`h-11 w-11 rounded-full border font-mono text-sm font-semibold transition-colors ${
             value === n
-              ? 'border-[var(--c-solar)] bg-[var(--c-solar)] text-[var(--c-void)]'
+              ? 'border-[var(--c-solar)] bg-[var(--c-solar)] text-[var(--c-stardust)]'
               : 'border-[var(--c-line)] text-[var(--c-mist)] hover:border-[var(--c-solar)]/50 hover:text-[var(--c-stardust)]'
           }`}
         >

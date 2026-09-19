@@ -6,7 +6,7 @@ export default function ShinyText({
   disabled = false,
   speed = 3,
   className = '',
-  shimmerColor = 'rgba(255, 255, 255, 0.9)',
+  shimmerColor = 'rgba(0, 180, 255, 0.9)',
 }) {
   const animationDuration = `${speed}s`
 
@@ -14,7 +14,7 @@ export default function ShinyText({
     <span
       className={`inline-block bg-clip-text text-transparent ${disabled ? '' : 'animate-shine'} ${className}`}
       style={{
-        backgroundImage: `linear-gradient(120deg, rgba(245, 242, 255, 0.3) 0%, rgba(245, 242, 255, 0.5) 30%, ${shimmerColor} 50%, rgba(245, 242, 255, 0.5) 70%, rgba(245, 242, 255, 0.3) 100%)`,
+        backgroundImage: `linear-gradient(120deg, rgba(11, 16, 32, 0.35) 0%, rgba(11, 16, 32, 0.55) 30%, ${shimmerColor} 50%, rgba(11, 16, 32, 0.55) 70%, rgba(11, 16, 32, 0.35) 100%)`,
         backgroundSize: '200% 100%',
         animationDuration,
         WebkitBackgroundClip: 'text',

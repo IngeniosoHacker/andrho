@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 // Lightweight interactive stardust background
 export default function ParticleField({
   density = 60,
-  color = '245, 242, 255',
+  color = '11, 16, 32',
   className = '',
 }) {
   const canvasRef = useRef(null)

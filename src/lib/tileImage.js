@@ -4,12 +4,12 @@
 // canvas-tainting/CORS issues that external images would otherwise hit when
 // read back into a WebGL texture.
 const PLANETS = [
-  { base: '#FFC745', shade: '#FF2162', variant: 'ring' },
-  { base: '#6EE7FF', shade: '#2C6E8F', variant: 'bands' },
-  { base: '#FF7A9C', shade: '#FF2162', variant: 'craters' },
-  { base: '#6EE7FF', shade: '#241F45', variant: 'glow' },
-  { base: '#FFC745', shade: '#241F45', variant: 'moon' },
-  { base: '#B98BFF', shade: '#241F45', variant: 'terminator' },
+  { base: '#00E6B8', shade: '#0B1020', variant: 'ring' },
+  { base: '#00B4FF', shade: '#12306B', variant: 'bands' },
+  { base: '#8B5CF6', shade: '#3B0764', variant: 'craters' },
+  { base: '#3B82F6', shade: '#0B1020', variant: 'glow' },
+  { base: '#38D9FF', shade: '#0B1020', variant: 'moon' },
+  { base: '#C084FC', shade: '#3B0764', variant: 'terminator' },
 ]
 
 const CX = 320

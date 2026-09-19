@@ -4,8 +4,8 @@ import { useRef } from 'react'
 // Features a dynamic radial spotlight and edge illumination that follows cursor movement
 export default function SpotlightCard({
   className = '',
-  spotlightColor = 'rgba(110, 231, 255, 0.15)',
-  borderColor = 'rgba(110, 231, 255, 0.35)',
+  spotlightColor = 'rgba(59, 130, 246, 0.15)',
+  borderColor = 'rgba(59, 130, 246, 0.35)',
   children,
 }) {
   const ref = useRef(null)

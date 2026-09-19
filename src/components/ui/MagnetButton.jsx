@@ -68,7 +68,7 @@ export default function MagnetButton({
         }}
         aria-hidden="true"
       />
-      <span className="relative z-10 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--c-solar)] px-6 py-3 text-sm font-semibold text-[var(--c-void)] transition-colors group-hover:bg-[var(--c-solar-dim)]">
+      <span className="relative z-10 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--c-solar)] px-6 py-3 text-sm font-semibold text-[var(--c-stardust)] transition-colors group-hover:bg-[var(--c-solar-dim)]">
         {children}
       </span>
     </Tag>

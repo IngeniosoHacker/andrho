@@ -114,7 +114,7 @@ export default function LiveProgress() {
 
       {status === 'loading' && (
         <Reveal delay={120} className="mt-16 flex justify-center">
-          <div className="h-40 w-full max-w-2xl animate-pulse rounded-3xl bg-white/5" />
+          <div className="h-40 w-full max-w-2xl animate-pulse rounded-3xl bg-black/5" />
         </Reveal>
       )}
 
