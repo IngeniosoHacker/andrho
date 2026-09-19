@@ -1,7 +1,5 @@
-// Waitlist survey data + local persistence.
-// NOTE: there is no backend yet (Go API is still pending per AI_INSTRUCTIONS.md),
-// so submissions are kept in localStorage for now. Swap `saveSubmission` for a
-// fetch() to the real endpoint once it exists.
+// Waitlist survey data + persistence.
+import { apiPost } from './api.js'
 
 export const SECTORS = [
   { value: 'comercio', label: 'Comercio / Retail' },
@@ -33,10 +31,10 @@ export const MANAGEMENT_TOOLS = [
   { value: 'mixto', label: 'Una mezcla de ambos' },
 ]
 
-const STORAGE_KEY = 'andrho_waitlist_submissions'
-
-export function saveSubmission(entry) {
-  const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  existing.push({ ...entry, submittedAt: new Date().toISOString() })
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(existing))
+// Persists to andrho-api's `waitlist_submissions` table (POST /waitlist,
+// public/unauthenticated -- see andrho-api/internal/handlers/waitlist.go).
+// Throws (with a user-facing `.message`) on failure so the form can show an
+// error and let the person retry instead of silently losing their answers.
+export async function saveSubmission(entry) {
+  await apiPost('/waitlist', entry)
 }
