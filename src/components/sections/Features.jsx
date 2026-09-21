@@ -5,7 +5,6 @@ import SpotlightCard from '../ui/SpotlightCard.jsx'
 import Carousel from '../ui/Carousel.jsx'
 import ParallaxLayer from '../ui/ParallaxLayer.jsx'
 import InfiniteMenu from '../ui/InfiniteMenu.jsx'
-import { makeTileImage } from '../../lib/tileImage.js'
 
 // High-level, customer-facing description of what AndRho does. Deliberately
 // stays at the "what" level — the underlying statistical/AI methods are
@@ -37,11 +36,10 @@ const FEATURES = [
   },
 ]
 
-// Sphere-menu items: on-brand generated planet tiles (no external stock
-// photos, no CORS/canvas-tainting risk) paired with each feature's
-// title/description.
+// Sphere-menu items: each feature gets a dedicated planet SVG from
+// public/planets/, paired with its title/description.
 const MENU_ITEMS = FEATURES.map((feature, i) => ({
-  image: makeTileImage({ label: feature.title, index: i }),
+  image: `/planets/planet-menu-${i + 1}.svg`,
   link: '#waitlist',
   title: feature.title,
   description: feature.body,

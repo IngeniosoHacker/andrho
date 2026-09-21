@@ -9,14 +9,10 @@ import {
   MANAGEMENT_TOOLS,
   saveSubmission,
 } from '../../lib/waitlist.js'
-import { makeTileImage } from '../../lib/tileImage.js'
-
 const STEPS = ['Contacto', 'Tu empresa', 'Presencia digital', 'Gestión actual']
 
-// One generated "planet" per step (same generator that textures the
-// InfiniteMenu sphere in Features.jsx) -- on-brand imagery for the wizard's
-// image panel with no new asset files to source or maintain.
-const STEP_VISUALS = STEPS.map((label, i) => makeTileImage({ label, index: i }))
+// One dedicated planet SVG per step, served from public/planets/.
+const STEP_VISUALS = STEPS.map((_, i) => `/planets/planet-waitlist-${i + 1}.svg`)
 
 const INITIAL_STATE = {
   name: '',
