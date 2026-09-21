@@ -43,7 +43,7 @@ export default function Hero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <MagnetButton as="a" href="#waitlist">
+          <MagnetButton as="a" href="/waitlist">
             Reservar mi asiento →
           </MagnetButton>
           <MagnetButton as="a" href="#proyecto" variant="secondary">

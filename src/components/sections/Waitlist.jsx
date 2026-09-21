@@ -36,7 +36,7 @@ export default function Waitlist() {
       </div>
 
       <Reveal className="mt-16 flex flex-col items-center gap-4 text-center">
-        <MagnetButton as="a" href="#mission-form">
+        <MagnetButton as="a" href="/#mission-form">
           Completar misión para reservar tu asiento
         </MagnetButton>
         <p className="font-mono text-xs text-[var(--c-mist)]">Toma menos de 3 minutos. Cero spam, cero ventas forzadas.</p>

@@ -40,7 +40,7 @@ const FEATURES = [
 // public/planets/, paired with its title/description.
 const MENU_ITEMS = FEATURES.map((feature, i) => ({
   image: `/planets/planet-menu-${i + 1}.svg`,
-  link: '#waitlist',
+  link: '/waitlist',
   title: feature.title,
   description: feature.body,
 }))
