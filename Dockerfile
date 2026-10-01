@@ -9,6 +9,10 @@ RUN npm ci
 
 COPY . .
 
+# Inlined into login/signup at build time (see .env.example)
+ARG VITE_ANDRHO_API_URL
+ENV VITE_ANDRHO_API_URL=$VITE_ANDRHO_API_URL
+
 RUN npm run build
 
 # Runtime

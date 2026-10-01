@@ -1,18 +1,18 @@
-import { Routes, Route } from 'react-router-dom'
-import Home from './pages/Home.jsx'
-import WaitlistPage from './pages/WaitlistPage.jsx'
+import Navbar from './components/sections/Navbar.jsx'
+import Hero from './components/sections/Hero.jsx'
+import Features from './components/sections/Features.jsx'
+import Pricing from './components/sections/Pricing.jsx'
+import Footer from './components/sections/Footer.jsx'
 
-// AndRho — under-construction landing page (see PRODUCT.md > Design).
-// Full marketing site comes back once the backend is ready; for now this
-// site's only job is: say we're under construction, explain the "why", and
-// collect the waiting list (its own page, see WaitlistPage.jsx).
+// AndRho — official marketing landing page.
 export default function App() {
   return (
     <div className="overflow-x-hidden antialiased">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/waitlist" element={<WaitlistPage />} />
-      </Routes>
+      <Navbar />
+      <Hero />
+      <Features />
+      <Pricing />
+      <Footer />
     </div>
   )
 }

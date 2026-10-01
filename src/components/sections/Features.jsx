@@ -1,10 +1,10 @@
+import { useState } from 'react'
 import GradientText from '../ui/GradientText.jsx'
-import ShinyText from '../ui/ShinyText.jsx'
 import Reveal from '../ui/Reveal.jsx'
-import SpotlightCard from '../ui/SpotlightCard.jsx'
-import Carousel from '../ui/Carousel.jsx'
-import ParallaxLayer from '../ui/ParallaxLayer.jsx'
 import InfiniteMenu from '../ui/InfiniteMenu.jsx'
+import Illustration from '../ui/Illustration.jsx'
+import { illustrations } from '../../lib/assets.js'
+import { makeTileImage } from '../../lib/tileImage.js'
 
 // High-level, customer-facing description of what AndRho does. Deliberately
 // stays at the "what" level — the underlying statistical/AI methods are
@@ -36,11 +36,12 @@ const FEATURES = [
   },
 ]
 
-// Sphere-menu items: each feature gets a dedicated planet SVG from
-// public/planets/, paired with its title/description.
+// Sphere-menu items: on-brand generated planet tiles (no external stock
+// photos, no CORS/canvas-tainting risk) paired with each feature's
+// title/description.
 const MENU_ITEMS = FEATURES.map((feature, i) => ({
-  image: `/planets/planet-menu-${i + 1}.svg`,
-  link: '/waitlist',
+  image: makeTileImage({ label: feature.title, index: i }),
+  link: '#pricing',
   title: feature.title,
   description: feature.body,
 }))
@@ -72,66 +73,89 @@ const USE_CASES = [
   },
 ]
 
+function SectorShowcase() {
+  const [active, setActive] = useState(0)
+  const current = USE_CASES[active]
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        {USE_CASES.map((useCase, i) => (
+          <button
+            key={useCase.sector}
+            type="button"
+            onClick={() => setActive(i)}
+            aria-pressed={i === active}
+            className={`rounded-full px-4 py-2 font-mono text-xs uppercase tracking-widest transition-colors ${
+              i === active
+                ? 'bg-[var(--color-ink)] text-[var(--color-canvas)]'
+                : 'border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--blue)] hover:text-[var(--color-ink)]'
+            }`}
+          >
+            {useCase.sector}
+          </button>
+        ))}
+      </div>
+
+      <div key={current.sector} className="mx-auto mt-12 max-w-2xl animate-fade-up text-center">
+        <h4 className="font-display text-2xl font-bold tracking-tight text-[var(--color-ink)] sm:text-3xl">{current.title}</h4>
+        <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-[var(--color-ink-soft)]">{current.body}</p>
+      </div>
+    </div>
+  )
+}
+
 export default function Features() {
   return (
     <section id="proyecto" className="relative mx-auto max-w-6xl px-6 py-28 lg:px-10 lg:py-40">
-      <ParallaxLayer speed={0.1} className="pointer-events-none absolute inset-0">
-        <div className="glow-orb -right-32 top-24 h-96 w-96 bg-[var(--c-comet)]/10" aria-hidden="true" />
-      </ParallaxLayer>
-
-      <Reveal className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+      <Reveal className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end lg:gap-16">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
           Una plataforma. <GradientText>Toda tu operación.</GradientText>
         </h2>
-        <p className="mt-6 text-lg leading-relaxed text-[var(--c-mist)]">
+        <p className="text-lg leading-relaxed text-[var(--color-ink-soft)] lg:pb-1">
           AndRho combina ciencia de datos, inteligencia artificial e infraestructura en la nube en
           un solo panel administrativo. No sustituye tu ERP ni tu CRM: los conecta, los entiende, y
           convierte lo que encuentra en decisiones que cualquier persona del equipo puede usar.
         </p>
       </Reveal>
 
-      <Reveal delay={100} className="relative mt-14 overflow-hidden">
-        <div className="flex w-max gap-10 animate-marquee py-2 font-mono text-sm uppercase tracking-[0.2em] text-[var(--c-mist)]">
+      <Reveal delay={100} className="relative mt-16 overflow-hidden">
+        <div className="flex w-max gap-3 animate-marquee">
           {[...CAPABILITIES, ...CAPABILITIES].map((tag, i) => (
-            <span key={i} className="flex items-center gap-3 whitespace-nowrap">
+            <span
+              key={i}
+              className="flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--color-border)] px-4 py-2 font-mono text-xs uppercase tracking-[0.15em] text-[var(--color-ink-soft)]"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--mint)]" />
               {tag}
-              <span className="h-1 w-1 rounded-full bg-[var(--c-line)]" />
             </span>
           ))}
         </div>
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[var(--c-void)] to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[var(--c-void)] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[var(--color-canvas)] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[var(--color-canvas)] to-transparent" />
       </Reveal>
 
-      <Reveal delay={100} className="mt-16">
-        <p className="mb-4 text-center font-mono text-xs uppercase tracking-[0.3em] text-[var(--c-mist)]">
+      {/* The sphere — preserved as-is: a draggable WebGL globe of feature
+          tiles, sitting directly on the page canvas. */}
+      <Reveal delay={100} className="relative mt-20">
+        <p className="mb-4 flex items-center justify-center gap-2 text-center font-mono text-xs uppercase tracking-[0.3em] text-[var(--color-faint)]">
           Arrastra la esfera para explorar
+          <Illustration src={illustrations.satellite} alt="" className="h-6 w-9 opacity-80" />
         </p>
-        <div
-          style={{ height: '620px', position: 'relative' }}
-          className="overflow-hidden rounded-3xl border border-[var(--c-line)] bg-[#0B1020]"
-        >
+        <div className="sm:h-[520px] lg:h-[620px]">
           <InfiniteMenu items={MENU_ITEMS} scale={1} />
         </div>
       </Reveal>
 
       <Reveal delay={150} className="mx-auto mt-28 max-w-2xl text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-[var(--c-comet)]">Un vistazo por sector</p>
-        <h3 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-          <ShinyText text="Se adapta a cómo ya trabajas." speed={4} />
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-[var(--blue)]">Un vistazo por sector</p>
+        <h3 className="mt-4 font-display text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+          Se adapta a cómo ya trabajas.
         </h3>
       </Reveal>
 
-      <Reveal delay={220} className="mx-auto mt-12 max-w-3xl">
-        <Carousel
-          items={USE_CASES.map((useCase) => (
-            <SpotlightCard key={useCase.title} className="p-10 text-center sm:p-14">
-              <span className="font-mono text-xs uppercase tracking-[0.3em] text-[var(--c-solar)]">{useCase.sector}</span>
-              <h4 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">{useCase.title}</h4>
-              <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-[var(--c-mist)]">{useCase.body}</p>
-            </SpotlightCard>
-          ))}
-        />
+      <Reveal delay={220} className="mt-12">
+        <SectorShowcase />
       </Reveal>
     </section>
   )
