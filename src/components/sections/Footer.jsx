@@ -28,7 +28,6 @@ const LINK_GROUPS = [
     links: [
       { label: `WhatsApp ${SITE.phone}`, href: SITE.whatsapp, external: true },
       { label: `Instagram ${SITE.instagramHandle}`, href: SITE.instagram, external: true },
-      { label: 'GitHub', href: SITE.github, external: true },
     ],
   },
 ]
