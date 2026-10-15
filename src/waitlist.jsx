@@ -1,6 +1,7 @@
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { markFormDone, recordVisit } from './lib/visitor.js'
 import SiteHeader from './components/landing/SiteHeader.jsx'
 import PixelStarfield from './components/ui/PixelStarfield.jsx'
 import SurveyArt from './components/waitlist/SurveyArt.jsx'
@@ -248,6 +249,7 @@ function WaitlistPage() {
       })
     }
     saveDraft(null)
+    markFormDone('waitlist')
     setSubmitting(false)
     transition(1, () => setDone({ submission, code, modules }), { tone: 'good', text: 'Bienvenido a bordo.' })
   }
@@ -374,6 +376,8 @@ function WaitlistPage() {
     </div>
   )
 }
+
+recordVisit()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

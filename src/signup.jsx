@@ -1,6 +1,7 @@
 import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { recordVisit } from './lib/visitor.js'
 import Navbar from './components/sections/Navbar.jsx'
 import Field from './components/ui/form/Field.jsx'
 import { TextInput, PasswordInput } from './components/ui/form/inputs.jsx'
@@ -141,6 +142,8 @@ function SignupPage() {
     </div>
   )
 }
+
+recordVisit()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
