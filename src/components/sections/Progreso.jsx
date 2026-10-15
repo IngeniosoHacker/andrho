@@ -5,14 +5,14 @@ import { apiGet } from '../../lib/authApi.js'
 // the activity of our three repositories, from andrho-api's GET /progress
 // (cached there, so visitors never hit GitHub's rate limit): the totals per
 // repo, and who builds it — the person with the most commits and the one
-// behind the latest. What each commit says isn't shown. If the API can't be
-// reached it falls back to plain links to the repos instead of hiding.
+// behind the latest. What each commit says isn't shown, and nothing links to
+// the code: the section shows that the work moves, not the work itself. If
+// the API can't be reached it shows the three repos without numbers.
 const REPOS = {
   andrho: { label: 'Sitio', body: 'El sitio que estás viendo.', color: '#00e6b8' },
   'andrho-tracker-dashboard': { label: 'Plataforma', body: 'El panel de AndRho y su analítica.', color: '#38d9ff' },
   'andrho-api': { label: 'Backend', body: 'Cuentas, lista de espera y recomendaciones.', color: '#c084fc' },
 }
-const GITHUB = 'https://github.com/IngeniosoHacker'
 
 const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' })
 function ago(date) {
@@ -39,15 +39,14 @@ const monthYear = (date) => new Date(date).toLocaleDateString('es-GT', { month: 
 function builders(data) {
   const top = [...data.contributors].sort((a, b) => b.commits - a.commits)[0]
   const last = [...data.recent].sort((a, b) => new Date(b.date) - new Date(a.date))[0]
-  const profile = (login) => data.contributors.find((c) => c.login === login)
+  const avatar = (login) => data.contributors.find((c) => c.login === login)?.avatarUrl
   return [
-    top && { key: 'top', label: 'Más commits', login: top.login, avatarUrl: top.avatarUrl, url: top.url, detail: `${top.commits.toLocaleString('es-GT')} commits` },
+    top && { key: 'top', label: 'Más commits', login: top.login, avatarUrl: top.avatarUrl, detail: `${top.commits.toLocaleString('es-GT')} commits` },
     last && {
       key: 'last',
       label: 'Último commit',
       login: last.author,
-      avatarUrl: last.avatarUrl || profile(last.author)?.avatarUrl,
-      url: profile(last.author)?.url || `https://github.com/${last.author}`,
+      avatarUrl: last.avatarUrl || avatar(last.author),
       detail: ago(last.date),
       date: last.date,
     },
@@ -56,7 +55,7 @@ function builders(data) {
 
 function Builder({ b }) {
   return (
-    <a href={b.url} target="_blank" rel="noreferrer" className="flex items-center gap-5 rounded-3xl border border-white/10 p-6 transition-colors hover:border-white/30 sm:p-8">
+    <div className="flex items-center gap-5 rounded-3xl border border-white/10 p-6 sm:p-8">
       {b.avatarUrl ? (
         <img src={b.avatarUrl} alt="" loading="lazy" className="h-20 w-20 shrink-0 rounded-full border border-white/15 sm:h-24 sm:w-24" />
       ) : (
@@ -67,7 +66,7 @@ function Builder({ b }) {
         <span className="mt-1 block truncate font-display text-3xl font-bold sm:text-4xl">@{b.login}</span>
         <span className="mt-1 block text-sm text-white/55">{b.date ? <time dateTime={b.date}>{b.detail}</time> : b.detail}</span>
       </span>
-    </a>
+    </div>
   )
 }
 
@@ -103,7 +102,7 @@ export default function Progreso() {
       <div className="mx-auto max-w-6xl">
         <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-white/50">
           <span aria-hidden="true" className="h-2 w-2 animate-pulse rounded-full bg-[var(--mint)]" />
-          En desarrollo · código público
+          En desarrollo · avance en vivo
         </p>
         <h2 id="progreso-title" className="mt-4 max-w-3xl font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-6xl">
           No confíes en la palabra, confía en el commit.
@@ -119,13 +118,13 @@ export default function Progreso() {
           <ul className="mt-12 grid gap-4 md:grid-cols-3">
             {Object.entries(REPOS).map(([name, repo]) => (
               <li key={name}>
-                <a href={`${GITHUB}/${name}`} target="_blank" rel="noreferrer" className="block rounded-2xl border border-white/10 p-5 transition-colors hover:border-white/30">
+                <div className="rounded-2xl border border-white/10 p-5">
                   <p className="font-mono text-xs uppercase tracking-widest" style={{ color: repo.color }}>
                     {repo.label}
                   </p>
                   <p className="mt-2 font-semibold">{name}</p>
                   <p className="mt-1 text-sm text-white/55">{repo.body}</p>
-                </a>
+                </div>
               </li>
             ))}
           </ul>
@@ -145,7 +144,7 @@ export default function Progreso() {
                   const repo = REPOS[r.name] ?? { label: 'Repo', body: r.description, color: '#ffffff' }
                   return (
                     <li key={r.name}>
-                      <a href={r.url} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 px-4 py-3.5 transition-colors hover:border-white/30">
+                      <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 px-4 py-3.5">
                         <span>
                           <span className="font-mono text-[11px] uppercase tracking-widest" style={{ color: repo.color }}>
                             {repo.label}
@@ -157,7 +156,7 @@ export default function Progreso() {
                           <span className="block font-display text-2xl font-bold">{r.commits}</span>
                           <span className="block text-xs text-white/45">{ago(r.lastCommitAt)}</span>
                         </span>
-                      </a>
+                      </div>
                     </li>
                   )
                 })}
@@ -168,9 +167,7 @@ export default function Progreso() {
                   <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">Quienes lo construyen</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {data.contributors.map((c) => (
-                      <a key={c.login} href={c.url} target="_blank" rel="noreferrer" title={`@${c.login} · ${c.commits} commits`}>
-                        <img src={c.avatarUrl} alt={`@${c.login}`} loading="lazy" className="h-11 w-11 rounded-full border border-white/15" />
-                      </a>
+                      <img key={c.login} src={c.avatarUrl} alt={`@${c.login}`} title={`@${c.login} · ${c.commits} commits`} loading="lazy" className="h-11 w-11 rounded-full border border-white/15" />
                     ))}
                   </div>
                 </div>
@@ -191,9 +188,6 @@ export default function Progreso() {
         <div className="mt-12 flex flex-col gap-3 sm:flex-row">
           <a href="/waitlist.html" className="inline-flex h-12 items-center justify-center rounded-[0.6rem] bg-white px-6 font-bold text-black transition-colors hover:bg-white/85">
             Unirme a la lista de espera
-          </a>
-          <a href={GITHUB} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center rounded-[0.6rem] border border-white/40 px-6 font-bold transition-colors hover:bg-white/10">
-            Ver en GitHub
           </a>
         </div>
       </div>

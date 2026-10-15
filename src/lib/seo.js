@@ -22,7 +22,6 @@ export const SITE = {
   instagramHandle: '@andrho.app',
   whatsapp: 'https://wa.me/19148889560',
   phone: '+1 (914) 888-9560',
-  github: 'https://github.com/IngeniosoHacker/andrho',
 }
 
 export const FAQ = [
@@ -117,7 +116,7 @@ export function jsonLd() {
     name: SITE.name,
     url: SITE.url,
     logo: `${SITE.url}/images/logo/andrho-mark.png`,
-    sameAs: [SITE.instagram, SITE.github],
+    sameAs: [SITE.instagram],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer support',

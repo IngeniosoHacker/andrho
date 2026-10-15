@@ -25,69 +25,84 @@ import { markdownToBlocks, readingMinutes } from './markdown.js'
 export const ARTICLES = [
   {
     slug: 'software-libre',
-    title: 'Software libre: por qué tu empresa no debería alquilar su propio sistema',
+    title: 'Software libre en tu empresa: lo que el software privativo dice y lo que no te cuenta',
     description:
-      'El software privativo cobra por permiso, guarda tus datos en formatos que no controlas y puede cambiar las reglas cuando quiera. Por qué AndRho está construido sobre software libre y por qué eso le conviene a tu empresa.',
+      '"Es inseguro", "nadie da soporte", "lo gratis sale caro". Respondemos uno por uno los argumentos que se usan contra el software libre en las empresas, y por qué AndRho está construido sobre él.',
     date: '2026-10-10',
     author: 'Equipo AndRho',
-    readingMinutes: 7,
+    readingMinutes: 8,
     tags: ['Software libre', 'Pymes', 'Tecnología'],
     body: [
       {
-        p: 'Cuando una empresa elige el software con el que va a administrar su negocio, no solo elige pantallas y botones. Elige quién decide sobre sus datos, cuánto le va a costar crecer y qué pasa el día que quiera irse. Con el software privativo, esas decisiones las toma otro.',
+        p: 'Si alguna vez evaluaste un sistema para tu empresa, seguro escuchaste alguno de estos argumentos: que el software libre es inseguro, que nadie responde si algo falla, que es cosa de programadores o que "lo gratis sale caro". Casi siempre vienen de quien vende licencias.',
       },
       {
-        p: 'AndRho está construido de punta a punta sobre **software libre**. No es una postura romántica: es la forma más sensata de construir algo que una pyme va a usar durante años. Aquí te contamos por qué, y por qué esa misma lógica le conviene a tu empresa.',
+        p: 'AndRho está construido de punta a punta sobre **software libre**, así que estas preguntas nos las hacen seguido. Aquí van las objeciones más comunes, una por una, con lo que tienen de cierto y lo que dejan fuera.',
       },
-      { h2: '¿Qué es el software libre?' },
+      { h2: 'Primero: qué es (y qué no es) el software libre' },
       {
-        p: 'Software libre no significa “gratis”. Significa que quien lo usa tiene cuatro libertades: **usarlo** para lo que quiera, **estudiar** cómo funciona, **modificarlo** para adaptarlo y **compartirlo**. Para que eso sea posible, el código fuente está disponible para cualquiera.',
+        p: 'Software libre no significa "gratis". Significa que quien lo usa tiene cuatro libertades: **usarlo** para lo que quiera, **estudiar** cómo funciona, **modificarlo** y **compartirlo**. El software privativo es lo contrario: compras, o cada vez más alquilas, un permiso para usar un programa que no puedes revisar, cambiar ni llevarte a otro lado.',
       },
       {
-        p: 'El software privativo es lo contrario: compras (o, cada vez más, alquilas) un permiso para usar un programa que no puedes revisar, no puedes cambiar y no puedes llevarte a otro lado. El producto es la licencia, no la solución.',
+        p: 'Y una aclaración que evita muchos malentendidos: que el **código** de un programa sea libre no hace públicos **tus datos**. Tus ventas, tus clientes y tu inventario son tan privados en un sistema libre como en uno privativo.',
       },
-      { h2: 'El costo que no aparece en la cotización' },
+      { h2: '"El software libre es inseguro porque cualquiera ve el código"' },
       {
-        p: 'El precio de la licencia es lo que se ve. Lo que no se ve suele ser más caro:',
+        p: 'Es el argumento más repetido y el que menos se sostiene. En seguridad hay un principio aceptado desde hace más de un siglo: un sistema debe ser seguro aunque su funcionamiento sea conocido. Esconder el código no elimina los fallos; solo hace que menos gente pueda encontrarlos y corregirlos.',
+      },
+      {
+        p: 'Los fallos existen en ambos mundos. La diferencia es qué pasa cuando aparecen. En 2014 se descubrió Heartbleed, un fallo grave en OpenSSL: el parche salió en días, todo el mundo pudo revisarlo, y el caso llevó a las grandes empresas tecnológicas a financiar la seguridad de proyectos libres críticos. En el software privativo dependes de que el fabricante reconozca el problema, decida arreglarlo y te avise.',
+      },
+      {
+        p: 'Hay un dato que lo resume: Linux, software libre, mueve la mayoría de los servidores de internet y todas las supercomputadoras de la lista TOP500. Los bancos, las bolsas de valores y las nubes más grandes del mundo no lo eligieron por ser inseguro.',
+      },
+      { h2: '"Si algo falla, nadie responde"' },
+      {
+        p: 'Libre no significa estar solo. Igual que con un sistema privativo, alguien tiene que instalarlo, mantenerlo y responder cuando hay un problema, y por eso hay empresas enteras dedicadas a dar soporte a software libre, con contratos y tiempos de respuesta.',
+      },
+      {
+        p: 'Vale la pena leer la letra pequeña del otro lado: casi todas las licencias privativas limitan al mínimo la responsabilidad del fabricante si el programa falla. Tener a quién llamar no es lo mismo que tener a alguien obligado a resolver. La diferencia real es esta: con software libre, si tu proveedor de soporte no te convence, **cambias de proveedor sin cambiar de sistema ni perder tus datos**. Con software privativo, el fabricante y el soporte suelen ser la misma empresa, y no hay a dónde ir.',
+      },
+      { h2: '"Lo gratis sale caro"' },
+      {
+        p: 'Tiene algo de razón: implementar cualquier sistema cuesta. Hay que instalarlo, migrar los datos, capacitar al equipo y mantenerlo, sea libre o privativo. Quien te diga que el software libre no cuesta nada te está vendiendo otra cosa.',
+      },
+      {
+        p: 'Lo que cambia es **qué pagas**. Con software libre pagas por servicio: que alguien lo instale, lo adapte y lo cuide. Con software privativo pagas eso **más** el permiso de usarlo, y ese permiso tiene costos que no salen en la primera cotización:',
       },
       {
         ul: [
-          '**Precios que no controlas.** El proveedor puede subir la licencia, cobrar por usuario o pasar de pago único a suscripción mensual. Tú solo puedes aceptar o empezar de cero.',
-          '**Encierro (vendor lock-in).** Tus datos viven en formatos cerrados y exportarlos completos es difícil, limitado o se cobra aparte. Cuanto más tiempo pasa, más caro es salir.',
-          '**Dependencia de un tercero.** Si el proveedor cierra, cambia de dueño o descontinúa el producto, tu operación queda en el aire, sin poder hacer nada al respecto.',
-          '**Una caja negra.** No puedes verificar qué hace el programa con tu información, con quién la comparte ni qué tan bien está protegida. Te queda confiar.',
-          '**Una multa por crecer.** Con licencias por usuario, cada persona que contratas cuesta más software. El éxito de tu negocio se convierte en la ganancia de tu proveedor.',
+          '**Precios que no controlas.** El proveedor puede subir la licencia, cobrar por usuario o pasar de pago único a suscripción. Solo te queda aceptar o empezar de cero.',
+          '**Una multa por crecer.** Con licencias por usuario, cada persona que contratas cuesta más software. Tu crecimiento se convierte en la ganancia de tu proveedor.',
+          '**El costo de salir.** Tus datos quedan en formatos cerrados, y exportarlos completos es difícil o se cobra aparte. Cuanto más tiempo pasa, más caro es irse.',
         ],
       },
-      { h2: 'Lo que gana tu empresa con software libre' },
-      { h3: '1. Tus datos son tuyos' },
       {
-        p: 'El software libre trabaja con formatos y estándares abiertos. Los datos de AndRho viven en **PostgreSQL**, una base de datos libre que cualquier programador del mundo sabe leer. Si algún día decides irte, tu información se va contigo, completa y legible.',
+        p: 'Un detalle histórico: a mediados de los 2000, varios estudios que concluían que el software libre "salía más caro" fueron financiados por un fabricante de software privativo como parte de su publicidad. Cuando leas una comparación de costos, revisa quién la pagó.',
       },
-      { h3: '2. Creces sin pagar más por permiso' },
+      { h2: '"El software libre es para programadores"' },
       {
-        p: 'No hay licencias por usuario que multiplicar. Lo que pagas es el servicio —que alguien lo instale, lo mantenga, lo adapte y te dé soporte—, no el derecho a usarlo. Contratar a diez personas más no te cuesta diez licencias más.',
+        p: 'Quien usa un sistema no ve su licencia. Si usas un celular Android, el navegador Firefox o un sitio hecho con WordPress, ya usas software libre todos los días sin notarlo. Que algo sea fácil o difícil de usar depende de cómo está diseñado, no de si su código es abierto.',
       },
-      { h3: '3. Seguridad que se puede comprobar' },
       {
-        p: 'Cuando el código es público, miles de personas pueden revisarlo, y los fallos se encuentran y se corrigen a la vista. No tienes que creerle a nadie: cualquiera puede verificar. En el software privativo, la seguridad es una promesa; en el libre, es algo que se audita.',
+        p: 'Lo que sí cambia es lo que pasa detrás: como el código se puede modificar, el sistema se puede ajustar a cómo trabaja tu negocio. Eso es lo que hace AndRho: **adaptarse a tu operación**, en lugar de obligarte a cambiarla para que encaje en un programa pensado para otra empresa.',
       },
-      { h3: '4. Se adapta a tu operación, no al revés' },
+      { h2: '"Un proyecto libre puede desaparecer"' },
       {
-        p: 'Como el código se puede modificar, el sistema se puede ajustar a cómo trabaja tu negocio. Es exactamente lo que hace AndRho: **adaptarse a tu operación** en lugar de obligarte a cambiarla para que encaje en un programa pensado para otra empresa.',
+        p: 'Cualquier software puede desaparecer. La pregunta es qué pasa contigo cuando sucede. Si un fabricante privativo cierra, vende el producto o lo descontinúa, nadie más puede seguirlo: el código es suyo.',
       },
-      { h3: '5. Nadie puede secuestrar el proyecto' },
       {
-        p: 'En 2024, Redis —una de las bases de datos en memoria más usadas del mundo— cambió su licencia a una que ya no era libre. En pocas semanas, la comunidad y empresas como AWS y Google crearon **Valkey**, una copia libre que siguió adelante bajo la Linux Foundation. En 2025, Redis volvió a ofrecer una licencia libre (AGPLv3). La lección: cuando el código es libre, un cambio de rumbo de una empresa no puede dejar a sus usuarios sin salida.',
+        p: 'Con software libre, el código sigue ahí y otros pueden continuarlo. Pasó en 2010, cuando la comunidad de OpenOffice creó LibreOffice tras la compra de Sun por Oracle. Y pasó en 2024, cuando Redis cambió su licencia a una que ya no era libre: en semanas, empresas como AWS y Google impulsaron **Valkey**, una continuación libre bajo la Linux Foundation, y en 2025 Redis volvió a ofrecer una licencia libre (AGPLv3). Un cambio de rumbo de una empresa no pudo dejar a sus usuarios sin salida.',
       },
-      { h3: '6. Talento y comunidad' },
+      { h2: '"Si mi sistema es libre, la competencia puede copiarlo"' },
       {
-        p: 'Las tecnologías libres son las que se enseñan en las universidades y las que usan los equipos de todo el mundo. Encontrar a alguien que entienda tu sistema es mucho más fácil cuando tu sistema está hecho con herramientas que todos conocen, documentadas en público.',
+        p: 'Tu ventaja nunca fue el código de tu sistema administrativo: fueron tus clientes, tu producto, tu forma de trabajar y tus datos. Ninguna de esas cosas se vuelve pública por usar software libre. Lo que sí ganas es que tus datos viven en formatos estándar: en AndRho viven en **PostgreSQL**, una base de datos libre que cualquier programador sabe leer. Si un día decides irte, tu información se va contigo, completa.',
+      },
+      { h2: 'Seamos honestos' },
+      {
+        p: 'No todo el software privativo es malo, y hay herramientas muy específicas que todavía no tienen una alternativa libre a la altura. Nuestra recomendación es simple: el **núcleo de tu negocio** —tus datos, tu ERP, tu operación— debería estar sobre software libre. Es lo que más te costaría perder y lo que más caro sería migrar.',
       },
       { h2: 'Las tecnologías libres sobre las que está construido AndRho' },
-      {
-        p: 'Cada pieza de AndRho es software libre, mantenido por comunidades enormes y usado por empresas de todos los tamaños:',
-      },
       {
         table: {
           head: ['Tecnología', 'Para qué la usamos', 'Licencia'],
@@ -103,30 +118,39 @@ export const ARTICLES = [
           ],
         },
       },
-      { h2: '¿Y si algo falla? ¿Quién me da soporte?' },
-      {
-        p: 'Libre no significa estar solo. Igual que con un sistema privativo, alguien tiene que instalarlo, mantenerlo y responder cuando hay un problema. La diferencia es que con software libre **pagas por ese servicio, no por un permiso**, y si el servicio no te convence puedes cambiar de proveedor sin cambiar de sistema ni perder tus datos. Ese es el papel de AndRho: nosotros operamos la plataforma para que tú te dediques a tu negocio.',
-      },
-      { h2: 'Seamos honestos' },
-      {
-        p: 'No todo el software privativo es malo, y hay herramientas muy específicas que todavía no tienen una alternativa libre a la altura. Nuestra recomendación es simple: el **núcleo de tu negocio** —tus datos, tu ERP, tu operación— debería estar sobre software libre. Es lo que más te costaría perder y lo que más caro sería migrar.',
-      },
       { h2: 'Cinco preguntas antes de contratar cualquier software' },
       {
         ol: [
           '¿Puedo exportar todos mis datos, completos, en un formato estándar?',
           '¿Qué le pasa a mi operación si el proveedor desaparece o cambia de dueño?',
           '¿Cuánto me va a costar cuando mi equipo sea el doble de grande?',
-          '¿Puedo adaptarlo a mi forma de trabajar sin pedirle permiso a nadie?',
-          '¿Puedo comprobar qué hace con mis datos?',
+          'Si el soporte no me convence, ¿puedo cambiar de proveedor sin cambiar de sistema?',
+          '¿Quién pagó el estudio que me muestran para convencerme?',
         ],
       },
       {
         p: 'Si las respuestas te dejan incómodo, no estás comprando software: estás alquilando tu propio sistema.',
       },
+      { h2: 'Preguntas frecuentes' },
+      { h3: '¿El software libre es seguro para una empresa?' },
+      {
+        p: 'Sí. Su seguridad no depende de esconder el código sino de que muchos puedan revisarlo y corregirlo. Linux, software libre, mueve la mayoría de los servidores de internet, incluidos los de bancos y grandes nubes.',
+      },
+      { h3: '¿Quién da soporte al software libre?' },
+      {
+        p: 'Empresas de servicio, con contrato, igual que con el software privativo. La diferencia es que puedes cambiar de proveedor de soporte sin cambiar de sistema ni perder tus datos.',
+      },
+      { h3: '¿El software libre es gratis?' },
+      {
+        p: 'La licencia sí; implementarlo y mantenerlo no. Con software libre pagas por servicio; con privativo pagas el servicio más el permiso de uso, que suele subir con cada usuario.',
+      },
+      { h3: '¿Si uso software libre mis datos son públicos?' },
+      {
+        p: 'No. El código del programa es abierto; tus datos son tan privados como en cualquier otro sistema.',
+      },
       { h2: 'Así trabajamos en AndRho' },
       {
-        p: 'AndRho todavía está en desarrollo, y lo construimos a la vista: nuestro código es público en [GitHub](https://github.com/IngeniosoHacker) y puedes ver [el avance en vivo](/#progreso), commit por commit. Si quieres un sistema que se adapte a tu negocio, que te diga qué está pasando con tus datos y que nunca te encierre, [únete a la lista de espera](/waitlist.html).',
+        p: 'AndRho todavía está en desarrollo y lo construimos a la vista: puedes ver [el avance en vivo](/#progreso). Si quieres un sistema que se adapte a tu negocio, que te diga qué está pasando con tus datos y que nunca te encierre, [únete a la lista de espera](/waitlist.html).',
       },
     ],
   },
