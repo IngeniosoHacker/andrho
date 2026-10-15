@@ -8,7 +8,8 @@ import { TOKEN_KEYS } from './authApi.js'
 //   recurrente   came back (a second visit or more) without the form
 //   registrado   already filled the waiting-list form (or has a session)
 //
-// Production only records it; the per-state landings live in development.
+// A returning visitor (recurrente, or registrado once on the list) gets a
+// short, plain page instead of the full landing (main.jsx).
 // A visit is a run of page views with less than VISIT_GAP between them.
 // Everything lives in this browser's localStorage, and the same facts go to
 // the web tracker as events, so the dashboard sees them per visitor
@@ -78,6 +79,19 @@ export function recordVisit() {
   const profile = { state: stateOf(v), visits: v.visits, form: v.form || '' }
   if (newVisit) track('visitor_profile', profile)
   return profile
+}
+
+// ?vista=completa|corta forces a view (testing, and the short page's "Ver el
+// sitio completo" link).
+const VIEWS = { completa: 'nuevo', corta: 'recurrente' }
+export function landingState(profile) {
+  const forced = VIEWS[new URLSearchParams(window.location.search).get('vista')]
+  return forced ?? profile.state
+}
+
+// The last form this visitor completed ('waitlist' or '').
+export function completedForm() {
+  return read()?.form || ''
 }
 
 // Marks a form as completed by this visitor ('waitlist').
